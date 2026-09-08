@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "io.github.nova_lab_web.twa",
+    "sha256_cert_fingerprints": [
+      "C4:43:D9:E4:0F:C2:B5:EA:D0:56:79:2E:4D:CF:67:30:1E:DF:5D:7A"
+    ]
+  }
+}]
