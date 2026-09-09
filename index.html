@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Dental Lab - نظام الحسابات v34</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#B3272B">
+<link rel="icon" href="icon-192.png">
+<!-- تم حذف رابط خط جوجل الخارجي: كان يمنع عمل التطبيق بدون إنترنت. الخط سيرجع تلقائياً لخطوط النظام (Segoe UI/Tahoma) الموجودة أصلاً كـ fallback -->
+<style>
+  :root{--bg:#FBF2F0;--panel:#FFFFFF;--panel-2:#FFF8F7;--ink:#241615;--muted:#8A6A67;--line:#EFD9D6;--line-2:#F6E8E6;--brand:#B3272B;--brand-dark:#7A1519;--brand-tint:#FBE7E7;--accent:#B8863B;--accent-tint:#F7EEDD;--ok:#3E7D5A;--ok-tint:#E7F3EC;--danger:#C1521B;--danger-tint:#FDECDD;--radius:12px;--shadow:0 1px 2px rgba(122,21,25,.06),0 4px 16px rgba(122,21,25,.07)}
+  *{box-sizing:border-box}html,body{margin:0;padding:0}body{background:var(--bg);color:var(--ink);font-family:'Tajawal',system-ui,sans-serif;font-variant-numeric:tabular-nums;direction:rtl;min-height:100vh}
+  #app{max-width:1200px;margin:0 auto;padding:16px 16px calc(88px + env(safe-area-inset-bottom))}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}.brand{display:flex;align-items:center;gap:10px}.brand-mark{width:42px;height:42px;border-radius:11px;background:#F7EEDD;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid #EAD8B4}.brand-mark svg{width:42px;height:42px}.brand-text h1{font-size:17px;font-weight:800;margin:0;line-height:1.2;letter-spacing:.3px}.brand-text span{font-size:11.5px;color:var(--muted)}
+  .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:500;background:var(--panel);border-top:1px solid var(--line);display:flex;justify-content:space-around;align-items:stretch;padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(122,21,25,.08)}
+  .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:transparent;color:var(--muted);padding:6px 2px;border-radius:9px;font-family:inherit;font-size:10.5px;font-weight:700;cursor:pointer}.nav-btn svg{width:20px;height:20px}.nav-btn.active{color:var(--brand)}.nav-btn.active .nav-icon-wrap{background:var(--brand-tint)}.nav-icon-wrap{width:38px;height:26px;border-radius:9px;display:flex;align-items:center;justify-content:center}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:16px}.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}.panel-head h2{font-size:16px;font-weight:800;margin:0}.panel-head .sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:9px 15px;border-radius:8px;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;transition:.15s}.btn svg{width:15px;height:15px;flex-shrink:0}.btn:hover{border-color:var(--brand);color:var(--brand-dark)}.btn-primary{background:var(--brand);border-color:var(--brand);color:#fff}.btn-primary:hover{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff}.btn-danger{color:var(--danger);border-color:var(--danger-tint)}.btn-danger:hover{background:var(--danger-tint);border-color:var(--danger)}.btn-ghost{border-color:transparent;background:transparent}.btn-ghost:hover{background:var(--line-2)}.btn-sm{padding:6px 10px;font-size:12.5px}.btn-icon{padding:8px}.btn:disabled{opacity:.4;cursor:not-allowed}
+  .field-row{display:flex;gap:8px;align-items:flex-end}.field-row .field{flex:1}.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}.field label{font-size:12.5px;font-weight:700;color:var(--muted)}.field input,.field select,.field textarea{font-family:inherit;font-size:13.5px;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--panel-2);color:var(--ink);width:100%;transition:.15s}.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--brand);background:#fff}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}@media(max-width:720px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr 1fr}}@media(max-width:480px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;font-size:13px}thead th{background:var(--brand-tint);color:var(--brand-dark);font-weight:800;padding:9px 10px;text-align:right;border-bottom:1.5px solid var(--line);font-size:12px;white-space:nowrap}tbody td{padding:8px 10px;border-bottom:1px solid var(--line-2);vertical-align:middle}tbody tr:hover{background:var(--panel-2)}tbody td select,tbody td input{font-family:inherit;font-size:12.5px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:#fff;width:100%}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:9px}.empty-row td{text-align:center;color:var(--muted);padding:26px 10px;font-size:13px}
+  .totals-bar{display:flex;gap:10px;flex-wrap:wrap;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:14px;margin-top:12px}.total-chip{flex:1;min-width:120px}.total-chip .l{font-size:11.5px;color:var(--muted);font-weight:700;margin-bottom:3px}.total-chip .v{font-size:17px;font-weight:800}.total-chip.due .v{color:var(--danger)}.total-chip.paid .v{color:var(--ok)}
+  .badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:99px;font-size:11.5px;font-weight:700;white-space:nowrap}.badge.due{background:var(--danger-tint);color:var(--danger)}.badge.settled{background:var(--ok-tint);color:var(--ok)}
+  .search-box{display:flex;align-items:center;gap:8px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;max-width:320px}.search-box svg{width:15px;height:15px;stroke:var(--muted);flex-shrink:0}.search-box input{border:none;background:transparent;font-family:inherit;font-size:13.5px;width:100%;outline:none}
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}.doc-card{border:1px solid var(--line);border-radius:9px;padding:13px;background:var(--panel-2)}.doc-card h3{margin:0 0 4px;font-size:14.5px;font-weight:800}.doc-card p{margin:0;font-size:12.5px;color:var(--muted)}.doc-card .row{display:flex;justify-content:space-between;align-items:center;margin-top:9px}.doc-card .amt{font-size:13px;font-weight:800}.row-actions{display:flex;gap:6px}.empty-state{text-align:center;padding:50px 20px;color:var(--muted)}.empty-state svg{width:40px;height:40px;stroke:var(--line);margin-bottom:10px}.empty-state p{font-size:13.5px;margin:0}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--brand-dark);color:#fff;padding:11px 20px;border-radius:9px;font-size:13.5px;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.2);opacity:0;pointer-events:none;transition:.25s;z-index:999}.toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+  .stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}.stat-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}.stat-card .l{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:6px}.stat-card .v{font-size:22px;font-weight:800}.stat-card.accentc{border-color:var(--brand)}.hint{font-size:11.5px;color:var(--muted);margin-top:4px}.photo-preview-wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.photo-preview{width:120px;height:120px;object-fit:cover;border-radius:9px;border:1px solid var(--line)}
+  #print-area{display:none}@media print{body *{visibility:hidden}#print-area,#print-area *{visibility:visible}#print-area{display:block;position:absolute;top:0;right:0;left:0;padding:20px 20px 60px}.print-title{font-size:20px;font-weight:800;margin-bottom:2px}.print-sub{font-size:12px;color:#555;margin-bottom:16px}.print-stats{display:flex;gap:20px;margin-bottom:16px;font-size:13px}.print-table{width:100%;border-collapse:collapse;font-size:11.5px;margin-bottom:10px}.print-table th,.print-table td{border:1px solid #ccc;padding:6px 8px;text-align:right}.print-table th{background:#eee}.print-case-h{background:#f6f6f6;font-weight:800}.print-discount-row td{color:#8a5f22}.print-case-total-row td{font-weight:800;background:#fafafa}.print-doctor-h{font-size:14px;font-weight:800;margin:14px 0 6px;padding-top:8px;border-top:2px solid #B3272B}.print-payments-h{font-weight:800;margin:8px 0 6px;font-size:12.5px}.print-doctor-due{font-weight:800;margin:6px 0 20px;font-size:13px}}
+
+/* Windows 11 desktop high-resolution enhancement */
+html,body{font-size:16px}body{font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+#app{max-width:1700px;padding:30px 42px 110px}
+.panel{border-radius:14px;padding:26px;margin-bottom:20px;box-shadow:0 1px 3px rgba(122,21,25,.07),0 8px 26px rgba(122,21,25,.07)}
+.panel-head{margin-bottom:20px;gap:14px}.panel-head h2{font-size:21px}.panel-head .sub{font-size:14px}
+.brand{gap:14px}.brand-mark{width:54px;height:54px;border-radius:14px}.brand-mark svg{width:54px;height:54px}.brand-text h1{font-size:23px}.brand-text span{font-size:14px}
+.stat-cards{gap:18px;margin-bottom:20px}.stat-card{border-radius:14px;padding:22px}.stat-card .l{font-size:14px;margin-bottom:8px}.stat-card .v{font-size:28px}
+.btn{padding:11px 18px;border-radius:9px;font-size:15px;min-height:44px}.btn-sm{padding:8px 13px;font-size:14px;min-height:38px}.btn-icon{padding:9px;min-width:40px}
+.field{gap:7px;margin-bottom:16px}.field label{font-size:14px}.field input,.field select,.field textarea{font-size:15px;padding:12px 13px;min-height:46px;border-radius:9px}
+.grid-2,.grid-3,.grid-4{gap:16px}
+table{font-size:15px}thead th{padding:12px 14px;font-size:14px}tbody td{padding:11px 14px}tbody td select,tbody td input{font-size:14px;padding:9px 10px;min-height:40px}.table-wrap{border-radius:11px}
+.totals-bar{gap:14px;padding:18px;margin-top:16px}.total-chip{min-width:150px}.total-chip .l{font-size:13px}.total-chip .v{font-size:21px}.badge{padding:6px 12px;font-size:13px}
+.search-box{max-width:460px;padding:11px 14px;border-radius:10px}.search-box input{font-size:15px}
+.card-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}.doc-card{border-radius:11px;padding:18px}.doc-card h3{font-size:17px}.doc-card p{font-size:14px}.doc-card .amt{font-size:15px}.hint{font-size:13px}.empty-state{padding:70px 25px}.empty-state p{font-size:15px}
+.bottom-nav{max-width:1700px;left:50%;right:auto;width:min(760px,calc(100% - 40px));transform:translateX(-50%);bottom:16px;border:1px solid var(--line);border-radius:16px;padding:9px 20px;box-shadow:0 8px 30px rgba(122,21,25,.13)}.nav-btn{padding:8px 4px;font-size:13px;gap:5px}.nav-icon-wrap{width:46px;height:31px;border-radius:10px}.nav-btn svg{width:23px;height:23px}
+@media(min-width:1400px){html,body{font-size:17px}#app{max-width:1800px;padding-left:55px;padding-right:55px}.panel{padding:30px}.panel-head h2{font-size:23px}.brand-text h1{font-size:25px}table{font-size:16px}thead th{font-size:15px}tbody td{padding:13px 16px}.field input,.field select,.field textarea{font-size:16px}}
+@media(max-width:720px){#app{padding:16px 14px 100px}.panel{padding:16px;border-radius:12px}.panel-head h2{font-size:17px}.brand-mark{width:46px;height:46px}.brand-mark svg{width:46px;height:46px}.brand-text h1{font-size:18px}.brand-text span{font-size:12px}.stat-card{padding:16px}.stat-card .v{font-size:22px}table{font-size:13px}thead th{font-size:12px}.btn{font-size:13.5px}.field input,.field select,.field textarea{font-size:14px}.bottom-nav{bottom:0;border-radius:0;width:100%;border-left:0;border-right:0;border-bottom:0;box-shadow:0 -2px 12px rgba(122,21,25,.08)}}
+
+/* ===== Balanced Windows 11 UI ===== */
+html,body{font-size:15px}
+body{font-family:'Tajawal','Segoe UI',Tahoma,Arial,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+#app{max-width:1380px;margin:0 auto;padding:20px 22px calc(88px + env(safe-area-inset-bottom))}
+.topbar{margin-bottom:16px;padding:0}
+.brand{gap:11px}.brand-mark{width:46px;height:46px;border-radius:12px}.brand-mark svg{width:46px;height:46px}
+.brand-text h1{font-size:19px;line-height:1.2}.brand-text span{font-size:12px}
+.panel{border-radius:11px;padding:18px;margin-bottom:15px;box-shadow:0 1px 2px rgba(122,21,25,.06),0 4px 15px rgba(122,21,25,.055)}
+.panel-head{margin-bottom:14px;gap:10px}.panel-head h2{font-size:17px}.panel-head .sub{font-size:12px}
+.stat-cards{gap:11px;margin-bottom:15px}.stat-card{border-radius:11px;padding:15px}.stat-card .l{font-size:12px;margin-bottom:5px}.stat-card .v{font-size:20px}
+.btn{padding:8px 13px;min-height:38px;border-radius:8px;font-size:13px}.btn-sm{padding:6px 10px;min-height:32px;font-size:12px}.btn-icon{padding:7px;min-width:34px}
+.field{gap:5px;margin-bottom:12px}.field label{font-size:12.5px}
+.field input,.field select,.field textarea{font-size:13px;padding:9px 10px;min-height:39px;border-radius:7px}
+.grid-2,.grid-3,.grid-4{gap:12px}
+table{font-size:13px}thead th{padding:9px 10px;font-size:12px}tbody td{padding:8px 10px}
+tbody td select,tbody td input{font-size:12px;padding:6px 7px;min-height:32px}.table-wrap{border-radius:8px}
+.totals-bar{gap:9px;padding:12px;margin-top:12px}.total-chip{min-width:115px}.total-chip .l{font-size:11px}.total-chip .v{font-size:16px}
+.badge{padding:4px 9px;font-size:11px}
+.search-box{max-width:380px;padding:8px 11px;border-radius:8px}.search-box input{font-size:13px}
+.card-grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}.doc-card{border-radius:9px;padding:13px}.doc-card h3{font-size:14px}.doc-card p{font-size:12px}.doc-card .amt{font-size:13px}
+.hint{font-size:11px}.empty-state{padding:45px 20px}.empty-state p{font-size:13px}
+.bottom-nav{padding:6px 10px calc(6px + env(safe-area-inset-bottom))}
+.nav-btn{padding:6px 3px;font-size:11px;gap:3px}.nav-icon-wrap{width:39px;height:27px;border-radius:8px}.nav-btn svg{width:20px;height:20px}
+.toast{bottom:22px;padding:10px 19px;font-size:13px}
+@media(min-width:1000px){#app{max-width:1380px;padding-left:26px;padding-right:26px}.bottom-nav{bottom:10px;border:1px solid var(--line);border-radius:12px;width:min(620px,calc(100% - 40px));box-shadow:0 5px 20px rgba(122,21,25,.10)}}
+@media(min-width:1500px){#app{max-width:1500px}}
+@media(max-width:720px){#app{padding:16px 14px 96px}.panel{padding:16px}.brand-mark{width:44px;height:44px}.brand-mark svg{width:44px;height:44px}}
+
+
+.nova-pay-qr{margin:18px auto 0;padding:12px;border:1px solid #dbe7f2;border-radius:12px;text-align:center;background:#f8fbff;page-break-inside:avoid;max-width:260px}.nova-pay-qr img{width:130px;height:130px;display:block;margin:8px auto}.nova-pay-qr .t{font-weight:800;color:#17486f;font-size:13px}.nova-pay-qr .s{font-size:10px;color:#71849a}
+
+.payment-public{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(135deg,#eef5fb,#f9fbfd);font-family:Arial,Tahoma,sans-serif}.payment-card{width:min(520px,100%);background:#fff;border:1px solid #dbe5ee;border-radius:24px;padding:34px 24px;box-shadow:0 18px 55px rgba(23,72,111,.12);text-align:center}.payment-logo{width:72px;height:72px;margin:0 auto 14px;border-radius:20px;border:2px solid #17486f;display:flex;align-items:center;justify-content:center;color:#17486f;font-weight:900;font-size:32px}.payment-card h1{margin:0;color:#17486f;font-size:28px}.payment-card .lab-sub{margin:7px 0 24px;color:#687789;font-size:15px}.payment-number-label{font-size:13px;color:#687789;margin-bottom:7px}.payment-number{direction:ltr;font-size:30px;font-weight:900;letter-spacing:1px;color:#17202a;background:#f4f8fb;border:1px solid #d9e5ee;border-radius:14px;padding:15px 10px}.copy-payment-number{width:100%;margin-top:12px;border:0;border-radius:12px;padding:13px 16px;background:#17486f;color:#fff;font-size:16px;font-weight:800;cursor:pointer}.payment-methods{margin:25px 0 18px;text-align:right}.payment-methods h2{font-size:18px;margin:0 0 12px;color:#17202a}.pay-method{display:flex;align-items:center;gap:10px;border:1px solid #e0e7ed;border-radius:13px;padding:12px;margin:8px 0;font-weight:800}.pay-dot{width:13px;height:13px;border-radius:50%;display:inline-block}.vod-dot{background:#7b2cbf}.insta-dot{background:#2874f0}.payment-warning{margin-top:20px;padding:14px;border-radius:13px;background:#fff7e6;border:1px solid #f0d69a;color:#7a5715;font-weight:800;line-height:1.7}.payment-footer{margin-top:20px;color:#8793a1;font-size:12px}.payment-card .check{font-size:13px;color:#17486f;margin-top:9px}
+</style>
+
+<style id="nova-accounting-final">
+.doctor-payment-panel{margin-top:8px}
+.doctor-payment-grid{display:grid;grid-template-columns:1.1fr .7fr 1.6fr auto;gap:6px;align-items:end}
+.action-icon{width:26px!important;min-width:26px!important;height:26px!important;min-height:26px!important;padding:2px!important}
+@media(max-width:720px){.doctor-payment-grid{grid-template-columns:1fr 1fr}.doctor-payment-grid .field:nth-child(3){grid-column:1/-1}.doctor-payment-grid .btn{grid-column:1/-1}}
+</style>
+<style id="nova-export-ui">.export-actions{display:flex;gap:7px;flex-wrap:wrap}.export-panel .sub{font-size:10px!important;color:#667085}.export-panel h2{font-size:13px!important}</style></head>
+<body>
+<div id="app"></div><div id="print-area"></div><div class="toast" id="toast"></div>
+<script>
+const STORAGE_PREFIX='nova_dental_';
+async function loadKey(k,f){try{const r=localStorage.getItem(STORAGE_PREFIX+k);return r?JSON.parse(r):f}catch(e){return f}}
+async function saveKey(k,v){try{localStorage.setItem(STORAGE_PREFIX+k,JSON.stringify(v))}catch(e){console.error(e)}}
+const state={tab:'cases',caseView:'list',editingCaseId:null,doctors:[],priceList:[],cases:[],doctorPayments:[],search:'',loaded:false,currentCase:null,reportFilters:{doctorId:'',from:'',to:''},searchFilters:{doctorId:'',from:'',to:''},settings:{pin:'',editPin:'',numerals:'en'},lastDoctorId:'',doctorDetailId:null,editingDoctorId:null,
+incompleteCaseGuard:false,locked:false,settingsUnlocked:false};
+const SHADE_3D_MASTER=['1M1','1M2','2L1.5','2L2.5','2M1','2M2','2M3','2R1.5','2R2.5','3L1.5','3L2.5','3M1','3M2','3M3','3R1.5','3R2.5','4L1.5','4L2.5','4M1','4M2','4M3','4R1.5','4R2.5','5M1','5M2','5M3'];
+function newCase(){return{id:'c_'+Date.now(),code:'C-'+String(state.cases.length+1).padStart(4,'0'),doctorId:state.lastDoctorId||'',receiveDate:new Date().toISOString().slice(0,10),items:[],discount:0,showDiscountInInvoice:false,payments:[],notes:'',photo:null,createdAt:Date.now()}}
+async function init(){state.doctors=await loadKey('doctors',[]);state.priceList=await loadKey('priceList',[{id:'p1',name:'زركونيا (Zirconia crown)',price:0},{id:'p2',name:'إيماكس (E.MAX press/CAD)',price:0},{id:'p3',name:'PFM (خزف على معدن)',price:0},{id:'p4',name:'أكريليك (Acrylic)',price:0},{id:'p5',name:'مرن (Flexible)',price:0},{id:'p6',name:'دعامة مصنعة (Custom post)',price:0},{id:'p7',name:'أخرى (Others)',price:0}]);state.cases=await loadKey('cases',[]);state.doctorPayments=await loadKey('doctorPayments',[]);state.invoices=await loadKey('invoices',[]);state.cases.forEach(c=>{if(!Array.isArray(c.payments))c.payments=Number(c.paid)>0?[{id:'pay_'+c.id,date:c.receiveDate||new Date().toISOString().slice(0,10),amount:Number(c.paid)||0}]:[];if(c.showDiscountInInvoice===undefined)c.showDiscountInInvoice=false});state.settings=await loadKey('settings',{pin:'',editPin:'',numerals:'en',carryoverMode:'auto'}); state.settings.editPin=state.settings.editPin||'';state.settings.carryoverMode=state.settings.carryoverMode||'auto';state.lastDoctorId=await loadKey('lastDoctorId','');state.locked=!!state.settings.pin;autoWeeklyBackup();state.loaded=true;render()}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+const ICON={plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',search:'<circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/>',edit:'<path d="M11 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>',save:'<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>',back:'<line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>',doc:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>',money:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',list:'<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>',chart:'<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',camera:'<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19 15l2 1-2 3-2-1a8 8 0 0 1-2 1v2h-4v-2a8 8 0 0 1-2-1l-2 1-2-3 2-1a8 8 0 0 1 0-2l-2-1 2-3 2 1a8 8 0 0 1 2-1V7h4v2a8 8 0 0 1 2 1l2-1 2 3-2 1a8 8 0 0 1 0 2z"/>',lock:'<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'};
+function icon(n){return`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICON[n]||''}</svg>`}
+function doctorName(id){const d=state.doctors.find(x=>x.id===id);return d?d.name:'—'}function priceOf(id){const p=state.priceList.find(x=>x.id===id);return p?Number(p.price)||0:0}function paidOf(c){return(c.payments||[]).reduce((s,p)=>s+(Number(p.amount)||0),0)}function caseTotals(c){const u=(c.items||[]).reduce((s,it)=>s+(Number(it.price)||0)*(Number(it.qty)||1),0);const total=Math.max(0,u-(Number(c.discount)||0));const paid=paidOf(c);return{unitsTotal:u,total,paid,due:Math.max(0,total-paid)}}function fmt(n){return(Number(n)||0).toLocaleString(state.settings.numerals==='ar'?'ar-EG':'en-US',{maximumFractionDigits:2})}function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}function lastInvoiceFor(doctorId,beforeDate){const list=state.invoices.filter(i=>i.doctorId===doctorId&&(!beforeDate||!i.to||i.to<beforeDate)).slice().sort((a,b)=>String(a.issuedAt).localeCompare(String(b.issuedAt)));return list.length?list[list.length-1]:null}function autoOpeningBalance(doctorId,fromDate){const inv=lastInvoiceFor(doctorId,fromDate);return inv?Number(inv.closingDue)||0:0}function printStatement(){const doctorId=state.searchFilters?.doctorId||'';if(!doctorId){toast('اختر الطبيب أولًا لطباعة كشف الحساب');return}const from=state.searchFilters?.from||'',to=state.searchFilters?.to||'';const cases=state.cases.filter(c=>c.doctorId===doctorId&&(!from||String(c.receiveDate||'')>=from)&&(!to||String(c.receiveDate||'')<=to)).sort((a,b)=>String(a.receiveDate||'').localeCompare(String(b.receiveDate||'')));const rows=[];cases.forEach(c=>{(c.items||[]).forEach(it=>{const type=state.priceList.find(p=>p.id===it.restorationId)?.name||'—';rows.push(`<tr><td>${esc(c.receiveDate||'—')}</td><td>${esc(it.itemName||'—')}</td><td>${esc(type)}</td><td>${esc(it.color||'—')}</td><td>${fmt(it.qty||1)}</td><td>${fmt(it.price)} ج.م</td></tr>`)})});const total=cases.reduce((s,c)=>s+caseTotals(c).total,0);const amounts=[];state.doctorPayments.filter(p=>p.doctorId===doctorId&&(!from||p.date>=from)&&(!to||p.date<=to)).forEach(p=>amounts.push(Number(p.amount||0)));cases.forEach(c=>(c.payments||[]).forEach(p=>{const date=p.date||c.receiveDate||'—';if((!from||date>=from)&&(!to||date<=to))amounts.push(Number(p.amount||0))}));const collected=amounts.reduce((a,b)=>a+b,0);const remaining=Math.max(0,total-collected);const html=`<div class="print-title">كشف حساب — د. ${esc(doctorName(doctorId))}</div><div class="print-sub">${from||'من بداية السجل'} — ${to||'حتى الآن'}</div><table class="print-table"><thead><tr><th>التاريخ</th><th>اسم الحالة</th><th>نوع الحالة</th><th>اللون</th><th>عدد الوحدات</th><th>السعر</th></tr></thead><tbody>${rows.join('')||'<tr><td colspan="6">لا توجد بيانات خلال الفترة</td></tr>'}</tbody></table><div class="print-doctor-due">الإجمالي: ${fmt(total)} ج.م</div><div class="print-doctor-due">المدفوع: ${fmt(collected)} ج.م</div><div class="print-doctor-due">المتبقي: ${fmt(remaining)} ج.م</div>`;document.getElementById('print-area').innerHTML=html;setTimeout(()=>window.print(),150)}
+function backupPayload(){return {app:'Nova Dental Lab',version:6,createdAt:new Date().toISOString(),doctors:state.doctors,priceList:state.priceList,cases:state.cases,doctorPayments:state.doctorPayments,invoices:state.invoices,settings:state.settings,lastDoctorId:state.lastDoctorId}}
+function autoWeeklyBackup(){try{const now=Date.now(),last=Number(localStorage.getItem('nova_dental_last_backup')||0);if(!last||now-last>=7*24*60*60*1000){localStorage.setItem('nova_dental_weekly_backup',JSON.stringify(backupPayload()));localStorage.setItem('nova_dental_last_backup',String(now))}}catch(e){console.warn(e)}}
+function downloadBackup(){const blob=new Blob([JSON.stringify(backupPayload(),null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Nova-Dental-Lab-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function makeExportHTML(){const doctorId=state.reportFilters.doctorId,from=state.reportFilters.from,to=state.reportFilters.to;if(!doctorId)return '<div style="padding:40px;text-align:center">اختر الطبيب أولًا</div>';const d=state.doctors.find(x=>x.id===doctorId),cases=state.cases.filter(c=>c.doctorId===doctorId&&(!from||c.receiveDate>=from)&&(!to||c.receiveDate<=to));let total=0;const rows=cases.map(c=>{const t=caseTotals(c);total+=t.total;const items=(c.items||[]).map(i=>{const type=state.priceList.find(p=>p.id===i.restorationId)?.name||'—';return `<tr><td>${esc(i.itemName||'—')}</td><td>${esc(type)}</td><td>${esc(i.color||'—')}</td><td>${fmt(i.qty||1)}</td><td>${fmt(i.price)} ج.م</td><td>${fmt((Number(i.price)||0)*(Number(i.qty)||1))} ج.م</td></tr>`}).join('');return `<section class="case"><div class="case-head"><div><span>الحالة</span><b>${esc(c.code)}</b></div><div><span>تاريخ الاستلام</span><b>${esc(c.receiveDate||'—')}</b></div></div><table><thead><tr><th>اسم الحالة</th><th>نوع التركيبة</th><th>اللون</th><th>الكمية</th><th>سعر الوحدة</th><th>الإجمالي</th></tr></thead><tbody>${items||'<tr><td colspan="6">لا توجد أصناف</td></tr>'}</tbody></table>${(Number(c.discount)>0&&c.showDiscountInInvoice)?`<div class="case-discount-line"><span>خصم</span><b>-${fmt(c.discount)} ج.م</b></div>`:''}${c.notes?`<div class="notes"><b>ملاحظات:</b> ${esc(c.notes)}</div>`:''}</section>`}).join('');
+const paymentRows=[];
+state.doctorPayments.filter(p=>p.doctorId===doctorId&&(!from||p.date>=from)&&(!to||p.date<=to)).forEach(p=>paymentRows.push({date:p.date||'—',amount:Number(p.amount||0),note:p.note||'',caseCode:'دفعة للطبيب',id:p.id}));
+cases.forEach(c=>(c.payments||[]).forEach(p=>{const date=p.date||c.receiveDate||'—';if((!from||date>=from)&&(!to||date<=to))paymentRows.push({date,amount:Number(p.amount||0),note:'مدفوع للحالة',caseCode:c.code,id:p.id});}));
+paymentRows.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+const unifiedPaid=paymentRows.reduce((a,p)=>a+p.amount,0);const opening=Number(state.reportFilters.openingBalance)||0;const due=Math.max(0,opening+total-unifiedPaid);
+const paymentHTML=paymentRows.map(p=>`<tr><td>${esc(p.date)}</td><td>${esc(p.caseCode)}</td><td>${fmt(p.amount)} ج.م</td><td>${esc(p.note)}</td></tr>`).join('')||'<tr><td colspan="4">لا يوجد مدفوع مسجل</td></tr>';
+return `<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>فاتورة - Nova Dental Lab</title><style>*{box-sizing:border-box}body{margin:0;background:#eef2f5;color:#17202a;font-family:Arial,'Tahoma',sans-serif;padding:26px}.invoice{width:210mm;min-height:297mm;margin:auto;background:#fff;position:relative;border:1px solid #d8dee5;box-shadow:0 10px 35px rgba(0,0,0,.08);padding:18mm 16mm 15mm}.top{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #cfd7df;padding-bottom:13px}.brand{display:flex;align-items:center;gap:10px}.brand-mark{width:48px;height:48px;border:2px solid #17486f;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#17486f;font-weight:900;font-size:22px}.brand h1{margin:0;font-size:24px;color:#17486f;letter-spacing:.2px}.brand p{margin:3px 0 0;font-size:10.5px;color:#697586}.invoice-title{text-align:left}.invoice-title h2{margin:0;font-size:23px;color:#17202a}.invoice-title .no{margin-top:6px;font-size:10.5px;color:#697586}.meta{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:8px;margin:13px 0}.meta-box{border:1px solid #d9e0e7;padding:9px 11px;border-radius:7px;background:#fafbfc}.meta-box label{display:block;font-size:9px;color:#7a8696;margin-bottom:3px}.meta-box b{font-size:12px}.section-title{font-size:13px;font-weight:800;margin:10px 0 7px;padding-right:8px;border-right:3px solid #17486f}.case{border:1px solid #d7dee6;border-radius:8px;margin:9px 0;overflow:hidden;page-break-inside:avoid}.case-head{display:flex;justify-content:space-between;background:#f4f7fa;padding:8px 10px;font-size:10.5px}.case-head span{color:#7a8696;margin-left:5px}.case-discount-line{display:flex;justify-content:space-between;padding:6px 10px;font-size:11px;color:#8a5f22;background:#fdf3e3;border-top:1px solid #eecf9a}.case table,.payment-table{width:100%;border-collapse:collapse;font-size:9.5px}.case th,.payment-table th{background:#17486f;color:#fff;padding:7px 6px;text-align:right;font-weight:700}.case td,.payment-table td{padding:6px;border-bottom:1px solid #e6ebef;text-align:right}.case tr:last-child td,.payment-table tr:last-child td{border-bottom:0}.notes{padding:7px 10px;border-top:1px dashed #d9e0e7;font-size:9.5px;color:#596575}.payment-log{border:1px solid #d7dee6;border-radius:8px;overflow:hidden}.payment-log .payment-table{margin:0}.bottom{display:grid;grid-template-columns:1fr 250px;gap:14px;margin-top:16px;page-break-inside:avoid}.payment-box{border:1px solid #d9e0e7;border-radius:8px;padding:12px}.payment-box h3{margin:0 0 9px;font-size:12px}.balance{display:flex;justify-content:space-between;border-top:1px solid #e2e7ec;margin-top:8px;padding-top:8px;font-size:11px}.balance b{font-size:15px;color:#b3272b}.opening-balance-box{display:flex;justify-content:space-between;align-items:center;background:#fdf3e3;border:1px solid #eecf9a;border-radius:8px;padding:10px 14px;margin:10px 0;font-size:12px;color:#8a5f22}.opening-balance-box b{font-size:16px}.qr-box{border:1px solid #d9e0e7;border-radius:8px;padding:10px;text-align:center}.qr-box img{width:125px;height:125px}.qr-box .qr-title{font-size:10.5px;font-weight:800;margin-bottom:3px}.qr-box .qr-note{font-size:8.5px;color:#697586}.footer{margin-top:15px;padding-top:10px;border-top:1px solid #d9e0e7;text-align:center;font-size:9px;color:#7a8696}.footer strong{color:#17486f;font-size:11px;display:block;margin-bottom:3px}@media print{body{background:#fff;padding:0}.invoice{width:210mm;min-height:297mm;border:0;box-shadow:none;margin:0;padding:14mm 14mm 12mm}}@media(max-width:800px){body{padding:8px}.invoice{width:100%;min-height:auto;padding:18px}.meta,.bottom{grid-template-columns:1fr 1fr}.bottom{grid-template-columns:1fr}.case{overflow-x:auto}.case table{min-width:650px}}</style></head><body><main class="invoice"><div class="top"><div class="brand"><div class="brand-mark">N</div><div><h1>Nova Dental Lab</h1><p>معمل أسنان — فاتورة خدمات وحساب</p></div></div><div class="invoice-title"><h2>فاتورة</h2><div class="no">تاريخ الإصدار: ${new Date().toLocaleDateString('ar-EG')}</div></div></div><div class="meta"><div class="meta-box"><label>الطبيب</label><b>د. ${esc(d?.name||'—')}</b></div><div class="meta-box"><label>الفترة</label><b>${from||'بداية السجل'} — ${to||'حتى الآن'}</b></div><div class="meta-box"><label>عدد الحالات</label><b>${cases.length} حالة</b></div></div>${opening?`<div class="opening-balance-box"><span>رصيد مرحّل من فواتير سابقة</span><b>${fmt(opening)} ج.م</b></div>`:''}<div class="section-title">تفاصيل الحالات</div>${rows||'<div style="padding:25px;text-align:center;color:#697586;border:1px dashed #ccd5df;border-radius:8px">لا توجد حالات في الفترة المحددة</div>'}<div class="section-title">سجل المدفوع</div><div class="payment-log"><table class="payment-table"><thead><tr><th>التاريخ</th><th>البيان</th><th>المبلغ المدفوع</th><th>ملاحظة</th></tr></thead><tbody>${paymentHTML}</tbody></table></div><div class="bottom"><div class="payment-box"><h3>المدفوع</h3><div style="font-size:10px;line-height:1.8">إجمالي كل المبالغ المدفوعة والمسجلة: <b>${fmt(unifiedPaid)} ج.م</b></div><div class="balance"><span>الإجمالي المستحق الآن</span><b>${fmt(due)} ج.م</b></div></div><div class="qr-box"><div class="qr-title">بيانات الدفع والتحويل</div><img src="data:image/png;base64,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" alt="QR"><div class="qr-note">امسح الرمز لفتح صفحة الدفع والتحويل</div></div></div><div class="footer"><strong>Nova Dental Lab</strong>شكرًا لتعاملكم معنا — نتمنى لكم دوام الثقة والتعاون</div></main></body></html>`}
+
+function openExport(printNow){const doctorId=state.reportFilters.doctorId;if(!doctorId){toast('اختر الطبيب أولًا');return}if(state.settings.carryoverMode==='manual'){const v=prompt('أدخل الرصيد المرحّل من الفواتير السابقة لهذا الطبيب (اكتب 0 إذا لا يوجد)','0');if(v===null)return;state.reportFilters.openingBalance=Number(v)||0}else{state.reportFilters.openingBalance=autoOpeningBalance(doctorId,state.reportFilters.from)}const w=window.open('','_blank');if(!w){toast('اسمح بفتح النوافذ المنبثقة');return}w.document.open();w.document.write(makeExportHTML());w.document.close();if(printNow){w.onload=()=>setTimeout(()=>w.print(),250)}}async function issueInvoice(){const doctorId=state.reportFilters.doctorId;if(!doctorId){toast('اختر الطبيب أولًا');return}const from=state.reportFilters.from,to=state.reportFilters.to;let opening=0;if(state.settings.carryoverMode==='manual'){const v=prompt('أدخل الرصيد المرحّل من الفواتير السابقة لهذا الطبيب (اكتب 0 إذا لا يوجد)','0');if(v===null)return;opening=Number(v)||0}else{opening=autoOpeningBalance(doctorId,from)}const cases=state.cases.filter(c=>c.doctorId===doctorId&&(!from||c.receiveDate>=from)&&(!to||c.receiveDate<=to));const periodTotal=cases.reduce((s,c)=>s+caseTotals(c).total,0);const amounts=[];state.doctorPayments.filter(p=>p.doctorId===doctorId&&(!from||p.date>=from)&&(!to||p.date<=to)).forEach(p=>amounts.push(Number(p.amount||0)));cases.forEach(c=>(c.payments||[]).forEach(p=>{const date=p.date||c.receiveDate||'—';if((!from||date>=from)&&(!to||date<=to))amounts.push(Number(p.amount||0))}));const periodPaid=amounts.reduce((a,b)=>a+b,0);const closingDue=Math.max(0,opening+periodTotal-periodPaid);state.invoices.push({id:'inv_'+Date.now(),doctorId,from:from||'',to:to||'',issuedAt:new Date().toISOString(),openingBalance:opening,periodTotal,periodPaid,closingDue});await saveKey('invoices',state.invoices);toast('تم حفظ الفاتورة — رصيد '+fmt(closingDue)+' ج.م سيظهر تلقائيًا في الفاتورة القادمة')}
+function render(){const a=document.getElementById('app');if(!state.loaded){a.innerHTML='<div class="empty-state">جاري التحميل...</div>';return}if(state.tab==='settings'&&!state.settingsUnlocked){state.tab='cases';}if(state.locked&&state.settings.pin){
+a.innerHTML=`<div class="lock-screen">
+  <div class="lock-topbar"><div class="lock-brand"><span class="lock-brand-dot">N</span><span>Nova Dental Lab</span><small>v2.3</small></div><div class="lock-window-icons"><span>−</span><span>□</span><span>×</span></div></div>
+  <div class="lock-bg-glow"></div>
+  <div class="lock-card">
+    <div class="lock-icon-ring">${icon('lock')}</div>
+    <div class="lock-logo"><b>NOVA</b> <strong>Dental Lab</strong></div>
+    <div class="lock-tagline">A R T&nbsp;&nbsp;•&nbsp;&nbsp;P R E C I S I O N&nbsp;&nbsp;•&nbsp;&nbsp;S M I L E S</div>
+    <div class="lock-title">النظام محمي <span>${icon('lock')}</span></div>
+    <div class="lock-sub">من فضلك أدخل كلمة المرور للمتابعة</div>
+    <div class="pin-boxes" id="pin-boxes">
+      <span></span><span></span><span></span><span></span>
+      <input type="password" id="lock-pin" inputmode="numeric" maxlength="7" autocomplete="off" aria-label="الرقم السري">
+    </div>
+    <button class="lock-enter" id="btn-unlock">دخول <b>←</b></button>
+    <div id="lock-error" class="lock-error"></div>
+  </div>
+  <div class="lock-footer"><span>◷ &nbsp; ${new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'})}</span><span>© Nova Dental Lab. All rights reserved.</span><span>🛡️ أمان كامل لبياناتك <i></i></span></div>
+</div>`;
+const lp=document.getElementById('lock-pin'), boxes=[...document.querySelectorAll('#pin-boxes span')];
+function paintPin(){const n=lp.value.length;boxes.forEach((b,i)=>{b.classList.toggle('filled',i<n);b.textContent=i<n?'•':''})}
+lp.addEventListener('input',paintPin);lp.focus();paintPin();
+document.getElementById('btn-unlock').onclick=()=>{const v=lp.value;if(v===state.settings.pin){state.locked=false;render()}else{document.getElementById('lock-error').textContent='الرقم السري غير صحيح';lp.select();}};
+lp.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('btn-unlock').click()});
+return}
+a.innerHTML=`<div class="topbar"><div class="brand"><div class="brand-mark">N</div><div class="brand-text"><h1>NOVA <span style="font-weight:600">Dental Lab</span></h1><span>نظام إدارة الحالات والحسابات</span></div></div></div>${state.tab==='cases'?casesTab():state.tab==='doctors'?doctorsAccountsTab():state.tab==='prices'?pricesTab():state.tab==='search'?searchTab():state.tab==='export'?exportTab():settingsTab()}${nav()}`;bind()}
+function nav(){return`<div class="bottom-nav">${[['cases','list','الحالات'],['doctors','doc','الأطباء والحسابات'],['prices','money','الأسعار'],['search','search','البحث'],['export','file','التصدير'],['settings','gear','الإعدادات']].map(x=>`<button class="nav-btn ${state.tab===x[0]?'active':''}" data-tab="${x[0]}"><span class="nav-icon-wrap">${icon(x[1])}</span><span>${x[2]}</span></button>`).join('')}</div>`}
+function casesTab(){if(state.caseView==='form')return caseForm();let q=state.search.trim(),list=state.cases.slice().sort((a,b)=>b.createdAt-a.createdAt);if(q)list=list.filter(c=>(c.code||'').includes(q)||doctorName(c.doctorId).includes(q));let total=state.cases.reduce((s,c)=>s+caseTotals(c).total,0),due=state.cases.reduce((s,c)=>s+caseTotals(c).due,0);return`<div class="stat-cards"><div class="stat-card accentc"><div class="l">عدد الحالات</div><div class="v">${state.cases.length}</div></div><div class="stat-card"><div class="l">إجمالي المستحقات</div><div class="v">${fmt(total)} ج.م</div></div><div class="stat-card"><div class="l">المتبقي غير المحصل</div><div class="v" style="color:var(--danger)">${fmt(due)} ج.م</div></div></div><div class="panel"><div class="panel-head"><div><h2>سجل الحالات</h2><div class="sub">كل الحالات المسجلة في المعمل</div></div><button class="btn btn-primary" id="new-case">${icon('plus')} حالة جديدة</button></div><div class="search-box" style="margin-bottom:12px">${icon('search')}<input id="search" placeholder="ابحث بكود الحالة أو اسم الطبيب" value="${esc(state.search)}"></div><div class="table-wrap"><table><thead><tr><th>الكود</th><th>الطبيب</th><th>الاستلام</th><th>الإجمالي</th><th>المدفوع</th><th>الباقي</th><th></th></tr></thead><tbody>${list.length?list.map(c=>{let t=caseTotals(c);return`<tr><td><strong>${esc(c.code)}</strong></td><td>${esc(doctorName(c.doctorId))}</td><td>${c.receiveDate||'—'}</td><td>${fmt(t.total)}</td><td>${fmt(t.paid)}</td><td>${t.due?`<span class="badge due">${fmt(t.due)}</span>`:`<span class="badge settled">مسدد</span>`}</td><td><button class="btn btn-ghost btn-sm" data-edit="${c.id}">${icon('edit')}</button><button class="btn btn-ghost btn-sm btn-danger" data-del="${c.id}">${icon('trash')}</button></td></tr>`}).join(''):'<tr class="empty-row"><td colspan="7">لا توجد حالات بعد</td></tr>'}</tbody></table></div></div>`}
+function caseForm(){let c=state.currentCase,t=caseTotals(c);return`<div class="panel"><div class="panel-head"><button class="btn btn-ghost btn-sm" id="back">${icon('back')} رجوع</button><h2>${state.editingCaseId?'تعديل حالة':'حالة جديدة'} — ${esc(c.code)}</h2><button class="btn btn-primary" id="save-case">${icon('save')} حفظ الحالة</button></div><div class="grid-2"><div class="field"><label>الطبيب المعالج</label><select id="doctor"><option value="">اختر الطبيب</option>${state.doctors.map(d=>`<option value="${d.id}" ${c.doctorId===d.id?'selected':''}>${esc(d.name)}</option>`).join('')}</select></div><div class="field"><label>التاريخ</label><input type="date" id="date" value="${c.receiveDate||''}"></div></div><div class="table-wrap"><table><thead><tr><th>اسم الحالة</th><th>نوع التركيبة</th><th>اللون</th><th>الكمية</th><th>سعر الوحدة</th><th>الإجمالي</th><th></th></tr></thead><tbody>${c.items.length?c.items.map(it=>`<tr><td><input data-f="itemName" data-id="${it.id}" value="${esc(it.itemName)}"></td><td><select data-f="restorationId" data-id="${it.id}"><option value="">اختر النوع</option>${state.priceList.map(p=>`<option value="${p.id}" ${it.restorationId===p.id?'selected':''}>${esc(p.name)}</option>`).join('')}<option value="__new__">➕ نوع جديد</option></select></td><td><select data-f="color" data-id="${it.id}"><option value="">اختر اللون</option>${SHADE_3D_MASTER.map(sh=>`<option value="${sh}" ${it.color===sh?'selected':''}>${sh}</option>`).join('')}<option value="__custom__" ${it.color && !SHADE_3D_MASTER.includes(it.color)?'selected':''}>لون مخصص...</option></select>${it.color && !SHADE_3D_MASTER.includes(it.color)?`<input data-custom-color="${it.id}" value="${esc(it.color)}" placeholder="اكتب اللون" style="margin-top:4px">`:''}</td><td><select data-f="qty" data-id="${it.id}">${Array.from({length:16},(_,i)=>i+1).map(n=>`<option ${Number(it.qty)===n?'selected':''}>${n}</option>`).join('')}</select></td><td><strong>${fmt(it.price)}</strong></td><td><strong>${fmt((Number(it.price)||0)*(Number(it.qty)||1))}</strong></td><td><button class="btn btn-ghost btn-sm btn-danger" data-rem-item="${it.id}">${icon('trash')}</button></td></tr>`).join(''):'<tr class="empty-row"><td colspan="7">اضغط إضافة صنف لبدء إضافة التركيبات</td></tr>'}</tbody></table></div><button class="btn btn-sm" id="add-item" style="margin-top:10px">${icon('plus')} إضافة صنف</button><div class="grid-2" style="margin-top:14px"><div class="field"><label>خصم</label><input type="number" min="0" id="discount" value="${c.discount||0}"><label style="display:flex;align-items:center;gap:6px;margin-top:6px;font-size:12.5px;font-weight:400"><input type="checkbox" id="show-discount-invoice" ${c.showDiscountInInvoice?'checked':''}> إظهار الخصم في الفاتورة</label></div><div class="field"><label>ملاحظات</label><input id="notes" value="${esc(c.notes)}"></div></div><div class="field"><label>المدفوع</label><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>المبلغ</th><th>طريقة الدفع</th><th></th></tr></thead><tbody>${c.payments.length?c.payments.map(p=>`<tr><td><input type="date" data-p="date" data-pid="${p.id}" value="${p.date||''}"></td><td><input type="number" min="0" data-p="amount" data-pid="${p.id}" value="${p.amount||0}"></td><td><select data-p="method" data-pid="${p.id}"><option value="">اختر</option><option value="فودافون كاش" ${p.method==='فودافون كاش'?'selected':''}>فودافون كاش</option><option value="نقدي" ${p.method==='نقدي'?'selected':''}>نقدي</option><option value="انستاباي" ${p.method==='انستاباي'?'selected':''}>انستاباي</option><option value="أخرى" ${p.method==='أخرى'?'selected':''}>أخرى</option></select></td><td><button class="btn btn-ghost btn-sm btn-danger" data-rem-pay="${p.id}">${icon('trash')}</button></td></tr>`).join(''):'<tr class="empty-row"><td colspan="4">لا يوجد مدفوع</td></tr>'}</tbody></table></div><button class="btn btn-sm" id="add-pay" style="margin-top:8px">${icon('plus')} إضافة المدفوع</button></div><div class="totals-bar"><div class="total-chip"><div class="l">عدد الأصناف</div><div class="v">${c.items.length}</div></div><div class="total-chip"><div class="l">قبل الخصم</div><div class="v">${fmt(t.unitsTotal)}</div></div><div class="total-chip"><div class="l">الإجمالي</div><div class="v">${fmt(t.total)}</div></div><div class="total-chip paid"><div class="l">المدفوع</div><div class="v">${fmt(t.paid)}</div></div><div class="total-chip due"><div class="l">الباقي</div><div class="v">${fmt(t.due)}</div></div></div></div>`}
+function doctorsTab(){if(state.doctorDetailId)return doctorDetail();return`<div class="panel"><div class="panel-head"><h2>${state.editingDoctorId?'تعديل طبيب':'الأطباء'}</h2></div><div class="grid-3"><div class="field"><label>اسم الطبيب</label><input id="doc-name" placeholder="مثال: د. أحمد سامي" value="${state.editingDoctorId?esc((state.doctors.find(d=>d.id===state.editingDoctorId)||{}).name||''):''}"></div><div class="field"><label>رقم الهاتف</label><input id="doc-phone" value="${state.editingDoctorId?esc((state.doctors.find(d=>d.id===state.editingDoctorId)||{}).phone||''):''}"></div><button class="btn btn-primary" id="${state.editingDoctorId?'save-doc-edit':'add-doc'}" style="align-self:end;margin-bottom:12px">${icon('save')} ${state.editingDoctorId?'حفظ التعديل':'إضافة طبيب'}</button></div>${state.editingDoctorId?'<button class="btn btn-ghost btn-sm" id="cancel-doc-edit">إلغاء</button>':''}</div><div class="panel"><div class="card-grid">${state.doctors.length?state.doctors.map(d=>{let cs=state.cases.filter(c=>c.doctorId===d.id),caseDue=cs.reduce((s,c)=>s+caseTotals(c).due,0),paid=state.doctorPayments.filter(p=>p.doctorId===d.id).reduce((s,p)=>s+Number(p.amount||0),0),due=Math.max(0,caseDue-paid);return`<div class="doc-card"><h3 data-detail="${d.id}" style="cursor:pointer">${esc(d.name)}</h3><p>${esc(d.phone||'بدون رقم هاتف')}</p><div class="row"><span>${cs.length} حالة</span><span class="amt" style="color:${due?'var(--danger)':'var(--ok)'}">${due?fmt(due)+' ج.م مستحق':'مسدد بالكامل'}</span></div><div class="row" style="gap:5px"><button class="btn btn-ghost btn-sm" data-edit-doc="${d.id}">${icon('edit')} تعديل</button><button class="btn btn-ghost btn-sm btn-danger" data-del-doc="${d.id}">${icon('trash')} حذف</button></div></div>`}).join(''):'<div class="empty-state">لا يوجد أطباء مسجلين بعد</div>'}</div></div>${accountsTab()}`}
+function doctorDetail(){let d=state.doctors.find(x=>x.id===state.doctorDetailId);if(!d){state.doctorDetailId=null;return doctorsTab()}let cs=state.cases.filter(c=>c.doctorId===d.id),total=cs.reduce((s,c)=>s+caseTotals(c).total,0),casePaid=cs.reduce((s,c)=>s+caseTotals(c).paid,0),doctorPaid=state.doctorPayments.filter(p=>p.doctorId===d.id).reduce((s,p)=>s+Number(p.amount||0),0),paid=casePaid+doctorPaid,due=Math.max(0,total-paid);return`<div class="panel"><div class="panel-head"><button class="btn btn-ghost btn-sm" id="back-doc">${icon('back')} رجوع</button><h2>${esc(d.name)}</h2><button class="btn btn-ghost btn-sm" data-edit-doc="${d.id}">${icon('edit')} تعديل</button></div><div class="stat-cards"><div class="stat-card"><div class="l">الإجمالي</div><div class="v">${fmt(total)} ج.م</div></div><div class="stat-card"><div class="l">المدفوع</div><div class="v" style="color:var(--ok)">${fmt(paid)} ج.م</div></div><div class="stat-card"><div class="l">المتبقي</div><div class="v" style="color:var(--danger)">${fmt(due)} ج.م</div></div></div><div class="panel doctor-payment-panel"><h3>إضافة المدفوع</h3><div class="grid-3"><div class="field"><label>المبلغ</label><input type="number" min="0" step="0.01" id="doctor-pay-amount" placeholder="0"></div><div class="field"><label>التاريخ</label><input type="date" id="doctor-pay-date" value="${new Date().toISOString().slice(0,10)}"></div><div class="field"><label>طريقة الدفع</label><select id="doctor-pay-note"><option value="">اختر طريقة الدفع</option><option value="نقدي">نقدي</option><option value="انستاباي">انستاباي</option><option value="فودافون كاش">فودافون كاش</option><option value="أخري">أخري</option></select><input id="doctor-pay-note-custom" placeholder="اكتب طريقة الدفع" style="display:none;margin-top:6px"></div></div><button class="btn btn-primary" id="add-doctor-pay">${icon('money')} إضافة المدفوع</button></div><div class="panel"><h3>سجل المدفوع</h3><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>المبلغ</th><th>ملاحظة</th><th></th></tr></thead><tbody>${state.doctorPayments.filter(p=>p.doctorId===d.id).length?state.doctorPayments.filter(p=>p.doctorId===d.id).map(p=>`<tr><td>${p.date||'—'}</td><td>${fmt(p.amount)} ج.م</td><td>${esc(p.note||'')}</td><td><button class="btn btn-ghost btn-sm" data-edit-doctor-pay="${p.id}">${icon('edit')}</button><button class="btn btn-ghost btn-sm btn-danger" data-del-doctor-pay="${p.id}">${icon('trash')}</button></td></tr>`).join(''):'<tr class="empty-row"><td colspan="4">لا يوجد مدفوع لهذا الطبيب</td></tr>'}</tbody></table></div></div><div class="table-wrap"><table><thead><tr><th>الكود</th><th>التاريخ</th><th>الإجمالي</th><th>مدفوع الحالة</th><th>الباقي بعد الدفعات</th><th></th></tr></thead><tbody>${cs.length?cs.map(c=>{let t=caseTotals(c);return`<tr><td>${c.code}</td><td>${c.receiveDate||'—'}</td><td>${fmt(t.total)}</td><td>${fmt(t.paid)}</td><td>${t.due?fmt(t.due):'مسدد'}</td><td><button class="btn btn-ghost btn-sm" data-edit="${c.id}">${icon('edit')}</button><button class="btn btn-ghost btn-sm btn-danger" data-del="${c.id}">${icon('trash')}</button></td></tr>`}).join(''):'<tr class="empty-row"><td colspan="6">لا توجد حالات</td></tr>'}</tbody></table></div></div>${accountsTab()}`}
+function doctorsAccountsTab(){return doctorsTab()}
+function pricesTab(){return`<div class="panel"><div class="panel-head"><h2>قائمة أسعار التركيبات</h2></div><div class="grid-2"><div class="field"><label>اسم التركيبة</label><input id="price-name"></div><div class="field"><label>السعر</label><input type="number" min="0" id="price-value"></div></div><button class="btn btn-primary" id="add-price">${icon('plus')} إضافة</button></div><div class="panel"><div class="table-wrap"><table><thead><tr><th>اسم التركيبة</th><th>السعر</th><th></th></tr></thead><tbody>${state.priceList.map(p=>`<tr><td>${esc(p.name)}</td><td><input type="number" min="0" data-price="${p.id}" value="${p.price||0}" style="width:120px"></td><td><button class="btn btn-ghost btn-sm btn-danger" data-del-price="${p.id}">${icon('trash')}</button></td></tr>`).join('')}</tbody></table></div></div>`}
+function searchTab(){
+const doctorId=state.searchFilters?.doctorId||'';
+const from=state.searchFilters?.from||'';
+const to=state.searchFilters?.to||'';
+const cases=state.cases.filter(c=>(!doctorId||c.doctorId===doctorId)&&(!from||String(c.receiveDate||'')>=from)&&(!to||String(c.receiveDate||'')<=to)).sort((a,b)=>String(b.receiveDate||'').localeCompare(String(a.receiveDate||'')));
+const payments=[];
+state.doctorPayments.filter(p=>(!doctorId||p.doctorId===doctorId)&&(!from||String(p.date||'')>=from)&&(!to||String(p.date||'')<=to)).forEach(p=>payments.push({date:p.date||'—',amount:Number(p.amount||0),method:p.note||'—',note:'دفعة عامة'+(!doctorId?' — د. '+doctorName(p.doctorId):''),source:'دفعة عامة'}));
+cases.forEach(c=>(c.payments||[]).forEach(p=>{const date=p.date||c.receiveDate||'—';if((!from||date>=from)&&(!to||date<=to))payments.push({date,amount:Number(p.amount||0),method:p.method||'—',note:'مدفوع للحالة '+(c.code||'')+(!doctorId?' — د. '+doctorName(c.doctorId):''),source:'الحالة'});}));
+payments.sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+const total=cases.reduce((s,c)=>s+caseTotals(c).total,0),collected=payments.reduce((s,p)=>s+p.amount,0),remaining=Math.max(0,total-collected);
+const caseHTML=cases.map(c=>{const t=caseTotals(c);const items=(c.items||[]).map(i=>{const type=state.priceList.find(p=>p.id===i.restorationId)?.name||'—';return `<tr><td>${esc(i.itemName||'—')}</td><td>${esc(type)}</td><td>${esc(i.color||'—')}</td><td>${fmt(i.qty||1)}</td><td>${fmt(i.price)} ج.م</td></tr>`}).join('')||'<tr><td colspan="5">لا توجد أصناف</td></tr>';return `<div class="search-case-card"><div class="search-case-head"><b>${esc(c.code||'حالة')}</b><span>تاريخ الحالة: ${esc(c.receiveDate||'—')}</span>${!doctorId?`<span>د. ${esc(doctorName(c.doctorId))}</span>`:''}</div><table><thead><tr><th>اسم الحالة</th><th>نوع التركيبة</th><th>اللون</th><th>الكمية</th><th>سعر الوحدة</th></tr></thead><tbody>${items}</tbody></table>${c.notes?`<div class="notes"><b>ملاحظات:</b> ${esc(c.notes)}</div>`:''}</div>`}).join('');
+const payHTML=payments.map(p=>`<tr><td>${esc(p.date)}</td><td>${fmt(p.amount)} ج.م</td><td>${esc(p.method)}</td><td>${esc(p.note)}</td></tr>`).join('')||'<tr class="empty-row"><td colspan="4">لا يوجد تحصيل خلال الفترة</td></tr>';
+return `<div class="panel"><div class="panel-head"><div><h2>البحث</h2><div class="sub">اختر طبيبًا لعرض كشف حسابه، أو اترك الطبيب فارغًا واحدد فترة فقط لمعرفة إجمالي المدفوع من كل الأطباء خلالها</div></div></div><div class="doctor-payment-grid"><div class="field"><label>الطبيب (اختياري)</label><select id="search-doctor"><option value="">كل الأطباء</option>${state.doctors.map(d=>`<option value="${d.id}" ${doctorId===d.id?'selected':''}>${esc(d.name)}</option>`).join('')}</select></div><div class="field"><label>من تاريخ</label><input type="date" id="search-from" value="${esc(from)}"></div><div class="field"><label>إلى تاريخ</label><input type="date" id="search-to" value="${esc(to)}"></div><button class="btn btn-primary" id="run-search">${icon('search')} بحث</button>${doctorId?`<button class="btn btn-primary" id="print-statement">${icon('save')} طباعة كشف الحساب</button>`:''}<button class="btn btn-ghost" id="clear-search">مسح</button></div></div>${(doctorId||from||to)?`<div class="stat-cards"><div class="stat-card"><div class="l">عدد الحالات</div><div class="v">${cases.length}</div></div><div class="stat-card"><div class="l">إجمالي الحالات</div><div class="v">${fmt(total)} ج.م</div></div><div class="stat-card"><div class="l">التحصيل</div><div class="v" style="color:var(--ok)">${fmt(collected)} ج.م</div></div><div class="stat-card"><div class="l">المتبقي</div><div class="v" style="color:var(--danger)">${fmt(remaining)} ج.م</div></div></div><div class="panel"><div class="panel-head"><div><h3>${doctorId?'حالات د. '+esc(doctorName(doctorId)):'كل الحالات خلال الفترة المحددة'}</h3><div class="sub">${from||'من بداية السجل'} — ${to||'حتى الآن'}</div></div></div>${caseHTML||'<div class="empty-state">لا توجد حالات في الفترة المحددة</div>'}</div><div class="panel"><div class="panel-head"><div><h3>سجل التحصيل</h3><div class="sub">كل مبلغ تم تسجيله خلال الفترة — ${doctorId?'لهذا الطبيب':'لكل الأطباء'}</div></div></div><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>المبلغ</th><th>طريقة الدفع</th><th>البيان</th></tr></thead><tbody>${payHTML}</tbody></table></div></div>`:''}`;
+}
+function accountsTab(){let total=state.cases.reduce((s,c)=>s+caseTotals(c).total,0),casePaid=state.cases.reduce((s,c)=>s+caseTotals(c).paid,0),doctorPaid=state.doctorPayments.reduce((s,p)=>s+Number(p.amount||0),0),paid=casePaid+doctorPaid,due=Math.max(0,total-paid);return`<div class="panel doctor-payment-panel"><div class="panel-head"><div><h3>تسجيل المدفوع</h3><div class="sub">أي مبلغ يرسله الطبيب يُسجل هنا بتاريخ تحصيله ويُخصم تلقائيًا من مستحقاته</div></div></div><div class="doctor-payment-grid"><div class="field"><label>الطبيب</label><select id="doctor-pay-doctor"><option value="">اختر الطبيب</option>${state.doctors.map(d=>`<option value="${d.id}">${esc(d.name)}</option>`).join('')}</select></div><div class="field"><label>المبلغ المدفوع</label><input type="number" id="doctor-pay-amount" min="0" step="0.01" placeholder="0"></div><div class="field"><label>تاريخ التحصيل</label><input type="date" id="doctor-pay-date" value="${new Date().toISOString().slice(0,10)}"></div><div class="field"><label>طريقة الدفع</label><select id="doctor-pay-note"><option value="">اختر طريقة الدفع</option><option value="فودافون كاش">فودافون كاش</option><option value="نقدي">نقدي</option><option value="انستاباي">انستاباي</option><option value="أخري">أخري</option></select><input id="doctor-pay-note-custom" placeholder="اكتب طريقة الدفع" style="display:none;margin-top:6px"></div><button class="btn btn-primary" id="add-doctor-pay">${icon('money')} إضافة المدفوع</button></div><div class="table-wrap" style="margin-top:8px"><table><thead><tr><th>الطبيب</th><th>المدفوع</th><th>تاريخ التحصيل</th><th>ملاحظة</th><th></th></tr></thead><tbody>${state.doctorPayments.length?state.doctorPayments.slice().reverse().map(p=>{let d=state.doctors.find(x=>x.id===p.doctorId);return`<tr><td>${esc(d?.name||'طبيب محذوف')}</td><td>${fmt(p.amount)} ج.م</td><td>${p.date||'—'}</td><td>${esc(p.note||'')}</td><td><button class="btn btn-ghost btn-sm" data-edit-doctor-pay="${p.id}">${icon('edit')}</button><button class="btn btn-ghost btn-sm btn-danger" data-del-doctor-pay="${p.id}">${icon('trash')}</button></td></tr>`}).join(''):'<tr class="empty-row"><td colspan="5">لا توجد دفعات مسجلة</td></tr>'}</tbody></table></div></div><div class="panel"><div class="panel-head"><h2>الحساب لكل طبيب</h2></div><div class="table-wrap"><table><thead><tr><th>الطبيب</th><th>الحالات</th><th>إجمالي الحالات</th><th>المدفوع</th><th>المتبقي</th><th></th></tr></thead><tbody>${state.doctors.map(d=>{let cs=state.cases.filter(c=>c.doctorId===d.id),t=cs.reduce((s,c)=>s+caseTotals(c).total,0),cp=cs.reduce((s,c)=>s+caseTotals(c).paid,0),dp=state.doctorPayments.filter(p=>p.doctorId===d.id).reduce((s,p)=>s+Number(p.amount||0),0),paid=cp+dp,u=Math.max(0,t-paid);return`<tr><td>${esc(d.name)}</td><td>${cs.length}</td><td>${fmt(t)}</td><td>${fmt(paid)}</td><td>${fmt(u)}</td><td><button class="btn btn-ghost btn-sm" data-detail="${d.id}">فتح</button></td></tr>`}).join('')}</tbody></table></div></div><div class="stat-cards"><div class="stat-card"><div class="l">إجمالي الحالات</div><div class="v">${fmt(total)} ج.م</div></div><div class="stat-card"><div class="l">إجمالي المحصل من الحالات</div><div class="v" style="color:var(--ok)">${fmt(casePaid)} ج.م</div></div><div class="stat-card"><div class="l">دفعات الأطباء</div><div class="v" style="color:var(--ok)">${fmt(doctorPaid)} ج.م</div></div><div class="stat-card"><div class="l">المتبقي</div><div class="v" style="color:var(--danger)">${fmt(due)} ج.م</div></div></div>`}
+function makeFullBackupHTML(){
+const today=new Date().toLocaleDateString('ar-EG');
+const doctors=state.doctors.slice();
+const allCases=state.cases.slice().sort((a,b)=>(a.receiveDate||'').localeCompare(b.receiveDate||''));
+let grandTotal=0,grandPaid=0,grandDue=0;
+const doctorSections=doctors.map(d=>{
+ const cases=allCases.filter(c=>c.doctorId===d.id);
+ let total=0,paid=0;
+ const caseBlocks=cases.map(c=>{
+  const t=caseTotals(c); total+=t.total; paid+=t.paid;
+  const date=c.receiveDate|| (c.createdAt?new Date(c.createdAt).toLocaleDateString('en-CA'):'—');
+  const items=(c.items||[]).map(i=>`<tr><td>${esc(i.itemName||'—')}</td><td>${esc(state.priceList.find(p=>p.id===i.restorationId)?.name||'—')}</td><td>${esc(i.color||'—')}</td><td>${fmt(i.qty||1)}</td><td>${fmt(i.price)} ج.م</td><td>${fmt((Number(i.price)||0)*(Number(i.qty)||1))} ج.م</td></tr>`).join('');
+  return `<section class="case"><div class="case-head"><div><span>رقم الحالة</span><b>${esc(c.code)}</b></div><div><span>تاريخ الحالة</span><b>${esc(date)}</b></div></div><table><thead><tr><th>اسم الحالة</th><th>نوع التركيبة</th><th>اللون</th><th>الكمية</th><th>سعر الوحدة</th><th>الإجمالي</th></tr></thead><tbody>${items||'<tr><td colspan="6">لا توجد تفاصيل أصناف</td></tr>'}</tbody></table>${c.notes?`<div class="notes"><b>ملاحظات:</b> ${esc(c.notes)}</div>`:''}</section>`;
+ }).join('');
+ const doctorPaymentRows=state.doctorPayments.filter(p=>p.doctorId===d.id).map(p=>({date:p.date||'—',amount:Number(p.amount||0),statement:'دفعة للطبيب',note:p.note||''}));
+ cases.forEach(c=>(c.payments||[]).forEach(p=>doctorPaymentRows.push({date:p.date||c.receiveDate||'—',amount:Number(p.amount||0),statement:`مدفوع للحالة ${c.code}`,note:''})));
+ doctorPaymentRows.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+ const doctorPayments=doctorPaymentRows.reduce((a,p)=>a+p.amount,0);
+ const unifiedDoctorPaid=paid+doctorPayments;
+ const due=Math.max(0,total-unifiedDoctorPaid); grandTotal+=total; grandPaid+=unifiedDoctorPaid; grandDue+=due;
+ const paymentLog=doctorPaymentRows.map(p=>`<tr><td>${esc(p.date)}</td><td>${esc(p.statement)}</td><td>${fmt(p.amount)} ج.م</td><td>${esc(p.note)}</td></tr>`).join('')||'<tr><td colspan="4">لا يوجد مدفوع مسجل</td></tr>';
+ return `<section class="doctor"><h2>الدكتور: ${esc(d.name||'—')}</h2><div class="summary"><div><span>عدد الحالات</span><b>${cases.length}</b></div><div><span>إجمالي الحالات</span><b>${fmt(total)} ج.م</b></div><div><span>المدفوع</span><b>${fmt(unifiedDoctorPaid)} ج.م</b></div><div><span>المتبقي</span><b>${fmt(due)} ج.م</b></div></div>${caseBlocks||'<div class="empty">لا توجد حالات مسجلة لهذا الدكتور.</div>'}<div class="section-title">سجل المدفوع</div><div class="payment-log"><table class="payment-table"><thead><tr><th>التاريخ</th><th>البيان</th><th>المبلغ المدفوع</th><th>ملاحظة</th></tr></thead><tbody>${paymentLog}</tbody></table></div></section>`;
+}).join('');
+const unknown=allCases.filter(c=>!doctors.some(d=>d.id===c.doctorId));
+const unknownBlock=unknown.length?`<section class="doctor"><h2>حالات بدون طبيب محدد</h2>${unknown.map(c=>`<div class="case"><div class="case-head"><div><span>رقم الحالة</span><b>${esc(c.code)}</b></div><div><span>تاريخ الحالة</span><b>${esc(c.receiveDate||'—')}</b></div></div><div class="notes">هذه الحالة غير مرتبطة بطبيب في البيانات الحالية.</div></div>`).join('')}</section>`:'';
+return `<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>Nova Dental Lab - النسخة الاحتياطية</title><style>*{box-sizing:border-box}body{margin:0;background:#eef2f5;color:#17202a;font-family:Arial,Tahoma,sans-serif;padding:22px}.page{max-width:1000px;margin:auto;background:#fff;padding:28px;border:1px solid #d8dee5}.top{display:flex;justify-content:space-between;border-bottom:2px solid #17486f;padding-bottom:14px;margin-bottom:18px}.brand h1{margin:0;color:#17486f}.brand p{margin:4px 0;color:#697586}.meta{text-align:left;font-size:11px;color:#697586}.doctor{margin:24px 0;page-break-before:auto}.doctor h2{background:#17486f;color:#fff;padding:10px 13px;border-radius:7px;margin:0 0 10px;font-size:18px}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.summary>div{border:1px solid #d9e0e7;border-radius:7px;padding:9px;text-align:center}.summary span{display:block;color:#697586;font-size:10px;margin-bottom:4px}.summary b{font-size:13px}.case{border:1px solid #d7dee6;border-radius:8px;margin:10px 0;overflow:hidden;page-break-inside:avoid}.case-head{display:flex;justify-content:space-between;background:#f4f7fa;padding:8px 10px;font-size:11px}.case-head span{color:#697586;margin-left:5px}.case table{width:100%;border-collapse:collapse;font-size:9.5px}.case th{background:#e9eef3;padding:7px;text-align:right}.case td{padding:6px;border-top:1px solid #e6ebef;text-align:right}.payment-table{width:100%;border-collapse:collapse;font-size:9.5px}.payment-table th{background:#17486f;color:#fff;padding:7px;text-align:right}.payment-table td{padding:6px;border-top:1px solid #e6ebef;text-align:right}.payment-log{border:1px solid #d7dee6;border-radius:8px;overflow:hidden;margin-top:10px}.payment-log .payment-table{margin:0}.case-foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:8px 10px;background:#fbfcfd;font-size:9.5px}.due{color:#b3272b}.notes{padding:8px 10px;border-top:1px dashed #d9e0e7;font-size:10px}.empty{padding:18px;text-align:center;color:#697586;border:1px dashed #ccd5df;border-radius:7px}.grand{border:2px solid #17486f;border-radius:8px;padding:14px;margin-top:22px}.grand h2{margin:0 0 10px;color:#17486f}.grand-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}.grand-grid div{border:1px solid #d9e0e7;padding:10px}.grand-grid span{display:block;font-size:10px;color:#697586}.footer{text-align:center;margin-top:20px;padding-top:10px;border-top:1px solid #d9e0e7;color:#697586;font-size:10px}@media print{body{background:#fff;padding:0}.page{max-width:none;border:0;padding:12mm}.doctor{break-inside:auto}}@media(max-width:700px){.summary,.grand-grid{grid-template-columns:1fr 1fr}.case{overflow-x:auto}.case table{min-width:650px}}</style></head><body><main class="page"><div class="top"><div class="brand"><h1>Nova Dental Lab</h1><p>نسخة احتياطية كاملة لبيانات المعمل</p></div><div class="meta">تاريخ إنشاء النسخة: ${today}<br>عدد الأطباء: ${doctors.length}<br>عدد الحالات: ${allCases.length}<br>يشمل السجل من أقدم حالة مسجلة حتى الآن</div></div>${doctorSections||'<div class="empty">لا توجد بيانات أطباء.</div>'}${unknownBlock}<section class="grand"><h2>الإجمالي العام</h2><div class="grand-grid"><div><span>إجمالي الحالات</span><b>${fmt(allCases.length)}</b></div><div><span>إجمالي قيمة الحالات</span><b>${fmt(grandTotal)} ج.م</b></div><div><span>إجمالي المدفوع</span><b>${fmt(grandPaid)} ج.م</b></div></div><div style="text-align:center;margin-top:10px;color:#b3272b;font-weight:800">إجمالي المتبقي: ${fmt(grandDue)} ج.م</div></section><div class="footer">Nova Dental Lab — نسخة احتياطية كاملة للقراءة والحفظ والطباعة</div></main></body></html>`;
+}
+function openFullBackupPDF(){const w=window.open('','_blank');if(!w){toast('اسمح بفتح النوافذ المنبثقة');return}w.document.open();w.document.write(makeFullBackupHTML());w.document.close();w.onload=()=>setTimeout(()=>w.print(),350)}function makeAllInvoicesExportHTML(){if(!state.invoices.length)return '<div style="padding:40px;text-align:center">لا توجد فواتير مصدرة محفوظة بعد. استخدم زر (إصدار وحفظ الفاتورة) أولًا</div>';const savedFilters={doctorId:state.reportFilters.doctorId,from:state.reportFilters.from,to:state.reportFilters.to,openingBalance:state.reportFilters.openingBalance};const sorted=state.invoices.slice().sort((a,b)=>{const da=state.doctors.find(x=>x.id===a.doctorId)?.name||'';const db=state.doctors.find(x=>x.id===b.doctorId)?.name||'';if(da!==db)return da.localeCompare(db,'ar');return String(a.issuedAt).localeCompare(String(b.issuedAt))});let styleBlock='';const bodies=sorted.map((rec,idx)=>{state.reportFilters={doctorId:rec.doctorId,from:rec.from,to:rec.to,openingBalance:rec.openingBalance};const doc=makeExportHTML();if(idx===0){const sMatch=doc.match(/<style>[\s\S]*?<\/style>/);styleBlock=sMatch?sMatch[0]:''}const mMatch=doc.match(/<main class="invoice">[\s\S]*?<\/main>/);const mainHtml=mMatch?mMatch[0]:'';return `<div style="page-break-after:always">${mainHtml}</div>`}).join('');state.reportFilters=savedFilters;return `<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>نسخة احتياطية شاملة - كل الفواتير المصدرة</title>${styleBlock}</head><body>${bodies}</body></html>`}function openAllInvoicesBackup(){const w=window.open('','_blank');if(!w){toast('اسمح بفتح النوافذ المنبثقة');return}w.document.open();w.document.write(makeAllInvoicesExportHTML());w.document.close();w.onload=()=>setTimeout(()=>w.print(),350)}
+function exportTab(){return `<div class="panel export-panel"><div class="panel-head"><div><h2>تصدير الفواتير</h2><div class="sub">اختر الطبيب والفترة الزمنية ثم اطبع أو احفظ الفاتورة كملف PDF</div></div></div><div class="grid-3"><div class="field"><label>الطبيب</label><select id="export-doctor"><option value="">اختر الطبيب</option>${state.doctors.map(d=>`<option value="${d.id}" ${state.reportFilters.doctorId===d.id?'selected':''}>${esc(d.name)}</option>`).join('')}</select></div><div class="field"><label>من تاريخ</label><input type="date" id="export-from" value="${state.reportFilters.from||''}"></div><div class="field"><label>إلى تاريخ</label><input type="date" id="export-to" value="${state.reportFilters.to||''}"></div></div><div class="export-actions"><button class="btn btn-primary" id="preview-export">${icon('file')} معاينة الفاتورة</button><button class="btn" id="pdf-export">${icon('save')} طباعة / حفظ PDF</button><button class="btn btn-primary" id="issue-invoice">${icon('save')} إصدار وحفظ الفاتورة</button></div></div><div class="panel"><h3>النسخة الاحتياطية</h3><div class="sub">يتم حفظ نسخة احتياطية داخل التطبيق تلقائيًا كل 7 أيام، ويمكنك تنزيل نسخة خارجية في أي وقت.</div><div class="export-actions" style="margin-top:8px"><button class="btn btn-primary" id="full-pdf-backup">نسخة احتياطية PDF كاملة</button><button class="btn btn-primary" id="all-invoices-pdf">نسخة احتياطية لكل الفواتير المصدرة PDF</button><button class="btn btn-primary" id="download-backup">تنزيل نسخة احتياطية</button><button class="btn" id="restore-backup">استعادة نسخة احتياطية</button><input type="file" id="backup-file" accept="application/json" hidden></div><div id="backup-status" class="sub" style="margin-top:7px"></div></div>`}
+function settingsTab(){return`<div class="panel"><h2>${icon('lock')} حماية البرنامج</h2><div class="field"><label>الرقم السري لدخول البرنامج</label><div class="field-row"><input type="password" id="pin" inputmode="numeric" placeholder="${state.settings.pin?'مفعّل حاليًا':'اكتب رقم سري'}"><button class="btn btn-primary" id="save-pin">${icon('save')} حفظ</button></div></div>${state.settings.pin?'<button class="btn btn-danger" id="clear-pin">إلغاء الرقم السري</button>':''}</div><div class="panel"><h2>🔐 رقم سري مستقل للتعديل والحذف</h2><div class="sub" style="margin-bottom:10px">هذا الرقم مطلوب عند تعديل أو حذف الحالات والأطباء والمدفوعات وأسعار التركيبات.</div><div class="field"><label>رقم سري التعديل والحذف</label><div class="field-row"><input type="password" id="edit-pin" inputmode="numeric" placeholder="${state.settings.editPin?'مفعّل حاليًا':'اكتب رقم سري'}"><button class="btn btn-primary" id="save-edit-pin">${icon('save')} حفظ</button></div></div>${state.settings.editPin?'<button class="btn btn-danger" id="clear-edit-pin">إلغاء رقم التعديل والحذف</button>':''}</div><div class="panel"><h2>شكل الأرقام</h2><div class="field"><select id="numerals"><option value="en" ${state.settings.numerals!=='ar'?'selected':''}>123 أرقام إنجليزية</option><option value="ar" ${state.settings.numerals==='ar'?'selected':''}>١٢٣ أرقام عربية</option></select></div></div><div class="panel"><h2>إعدادات الفاتورة</h2><div class="sub" style="margin-bottom:10px">طريقة ترحيل الرصيد المتبقي من الفواتير السابقة إلى الفاتورة الجديدة</div><div class="field"><select id="carryover-mode"><option value="auto" ${state.settings.carryoverMode!=='manual'?'selected':''}>تلقائي — يحسبه البرنامج من آخر فاتورة</option><option value="manual" ${state.settings.carryoverMode==='manual'?'selected':''}>يدوي — أدخله بنفسك في كل فاتورة</option></select></div></div>`}
+function verify(){if(!state.settings.pin)return true;return prompt('أدخل الرقم السري')===state.settings.pin}
+function verifyEditDelete(){if(!state.settings.editPin){toast('ضع الرقم السري للتعديل والحذف من الإعدادات أولًا');return false;}const v=prompt('أدخل الرقم السري للتعديل والحذف');if(v===state.settings.editPin)return true;toast('الرقم السري للتعديل والحذف غير صحيح');return false}
+function incompleteCaseWarning(){
+  if(!state.currentCase || !state.incompleteCaseGuard)return true;
+  const missing=[];
+  if(!state.currentCase.doctorId)missing.push('اختيار الطبيب');
+  if(!state.currentCase.id || !state.cases.some(c=>c.id===state.currentCase.id))missing.push('حفظ الحالة');
+  const msg='بيانات الحالة ناقصة\n'+(missing.length?'الناقص: '+missing.join(' و ')+'\n':'')+'أدخل كلمة السر للمتابعة واستكمال بيانات الحالة.';
+  if(!state.settings.pin){toast('بيانات الحالة ناقصة — أكمل البيانات واحفظ الحالة');return false;}
+  const v=prompt(msg+'\nكلمة السر:');
+  if(v===state.settings.pin){
+    toast('تم السماح لك بالمتابعة — أكمل البيانات الناقصة ثم احفظ الحالة');
+    setTimeout(()=>{const d=document.getElementById('doctor');if(d&&!state.currentCase.doctorId)d.focus();else{const first=document.querySelector('[data-f]');if(first)first.focus();}},50);
+    return false;
+  }
+  toast('كلمة السر غير صحيحة');
+  return false;
+}
+
+function canLeaveCase(){
+  if(state.tab==='cases' && state.caseView==='form' && state.incompleteCaseGuard){
+    incompleteCaseWarning();
+    return false;
+  }
+  return true;
+}
+
+function bind(){
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{if(!canLeaveCase())return;const tab=b.dataset.tab;if(tab==='settings'&&state.tab!=='settings'){const v=prompt('أدخل كلمة سر الإعدادات');if(v!=='3611376'){toast('كلمة سر الإعدادات غير صحيحة');state.tab='cases';state.settingsUnlocked=false;render();return}state.settingsUnlocked=true}if(tab==='prices'&&state.tab!=='prices'){if(!verifyEditDelete())return}if(state.tab==='settings'&&tab!=='settings')state.settingsUnlocked=false;state.tab=tab;state.caseView='list';state.currentCase=null;state.doctorDetailId=null;state.editingDoctorId=null;state.incompleteCaseGuard=false;render()});
+let x=document.getElementById('new-case');if(x)x.onclick=()=>{state.currentCase=newCase();state.editingCaseId=null;state.caseView='form';state.incompleteCaseGuard=false;render()};
+x=document.getElementById('search');if(x)x.oninput=e=>{state.search=e.target.value;const q=state.search.trim();document.querySelectorAll('tbody tr').forEach(r=>{if(r.classList.contains('empty-row'))return;const txt=r.textContent||'';r.style.display=(!q||txt.includes(q))?'':'none'});};
+document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{if(!verifyEditDelete())return;let c=state.cases.find(x=>x.id===b.dataset.edit);if(!c)return;state.currentCase=JSON.parse(JSON.stringify(c));state.editingCaseId=c.id;state.caseView='form';state.incompleteCaseGuard=false;render()});
+document.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{if(!verifyEditDelete()||!confirm('حذف الحالة؟'))return;state.cases=state.cases.filter(c=>c.id!==b.dataset.del);await saveKey('cases',state.cases);render()});
+document.querySelectorAll('[data-detail]').forEach(b=>b.onclick=()=>{state.doctorDetailId=b.dataset.detail;render()});
+document.querySelectorAll('[data-edit-doc]').forEach(b=>b.onclick=e=>{e.stopPropagation();if(!verifyEditDelete())return;state.editingDoctorId=b.dataset.editDoc;state.doctorDetailId=null;state.tab='doctors';render()});
+document.querySelectorAll('[data-del-doc]').forEach(b=>b.onclick=async()=>{if(!verifyEditDelete()||!confirm('حذف الطبيب؟ سيتم الاحتفاظ بالحالات القديمة باسمه لكن لن يظهر كطبيب نشط.'))return;state.doctors=state.doctors.filter(d=>d.id!==b.dataset.delDoc);await saveKey('doctors',state.doctors);render()});
+let add=document.getElementById('add-doc');if(add)add.onclick=async()=>{let n=document.getElementById('doc-name').value.trim();if(!n)return toast('اكتب اسم الطبيب');state.doctors.push({id:'d_'+Date.now(),name:n,phone:document.getElementById('doc-phone').value.trim()});await saveKey('doctors',state.doctors);render()};
+let sed=document.getElementById('save-doc-edit');if(sed)sed.onclick=async()=>{if(!verifyEditDelete())return;let d=state.doctors.find(x=>x.id===state.editingDoctorId),n=document.getElementById('doc-name').value.trim();if(!d||!n)return toast('اكتب اسم الطبيب');d.name=n;d.phone=document.getElementById('doc-phone').value.trim();await saveKey('doctors',state.doctors);state.editingDoctorId=null;render()};
+let ced=document.getElementById('cancel-doc-edit');if(ced)ced.onclick=()=>{state.editingDoctorId=null;render()};
+let back=document.getElementById('back');if(back)back.onclick=()=>{if(!canLeaveCase())return;state.caseView='list';state.currentCase=null;state.incompleteCaseGuard=false;render()};
+let d=document.getElementById('doctor');if(d)d.onchange=e=>state.currentCase.doctorId=e.target.value;
+d=document.getElementById('date');if(d)d.onchange=e=>state.currentCase.receiveDate=e.target.value;
+d=document.getElementById('discount');if(d)d.oninput=e=>{state.currentCase.discount=e.target.value};let sdi=document.getElementById('show-discount-invoice');if(sdi)sdi.onchange=e=>{state.currentCase.showDiscountInInvoice=e.target.checked};
+d=document.getElementById('notes');if(d)d.oninput=e=>state.currentCase.notes=e.target.value;
+let addi=document.getElementById('add-item');if(addi)addi.onclick=()=>{state.currentCase.items.push({id:'i_'+Date.now(),itemName:'',restorationId:'',color:'',qty:1,price:0});state.incompleteCaseGuard=true;render()};
+document.querySelectorAll('[data-rem-item]').forEach(b=>b.onclick=()=>{if(!verifyEditDelete())return;state.currentCase.items=state.currentCase.items.filter(i=>i.id!==b.dataset.remItem);render()});
+document.querySelectorAll('[data-f]').forEach(e=>{e.oninput=()=>{let i=state.currentCase.items.find(x=>x.id===e.dataset.id);if(i)i[e.dataset.f]=e.value};e.onchange=()=>{let i=state.currentCase.items.find(x=>x.id===e.dataset.id);if(!i)return;if(e.dataset.f==='restorationId'){if(e.value==='__new__'){let n=prompt('اسم نوع الشغل الجديد');if(n){let p=Number(prompt('السعر','0'))||0,ni={id:'p_'+Date.now(),name:n,price:p};state.priceList.push(ni);i.restorationId=ni.id;i.price=p;saveKey('priceList',state.priceList)}}else i.price=priceOf(e.value);render()}else if(e.dataset.f==='qty'){i.qty=e.value;render()}}});document.querySelectorAll('[data-custom-color]').forEach(e=>e.oninput=()=>{let i=state.currentCase.items.find(x=>x.id===e.dataset.customColor);if(i)i.color=e.value});
+let ap=document.getElementById('add-pay');if(ap)ap.onclick=()=>{state.currentCase.payments.push({id:'pay_'+Date.now(),date:new Date().toISOString().slice(0,10),amount:0});render()};
+document.querySelectorAll('[data-p]').forEach(e=>{const upd=()=>{let p=state.currentCase.payments.find(x=>x.id===e.dataset.pid);if(p)p[e.dataset.p]=e.value};e.oninput=upd;e.onchange=upd});
+document.querySelectorAll('[data-rem-pay]').forEach(b=>b.onclick=()=>{if(!verifyEditDelete())return;state.currentCase.payments=state.currentCase.payments.filter(p=>p.id!==b.dataset.remPay);render()});
+let save=document.getElementById('save-case');if(save)save.onclick=async()=>{if(state.editingCaseId&&!verifyEditDelete())return;if(!state.currentCase.doctorId){toast('اختر الطبيب');return}let i=state.cases.findIndex(c=>c.id===state.currentCase.id);if(i>=0)state.cases[i]=state.currentCase;else state.cases.push(state.currentCase);state.lastDoctorId=state.currentCase.doctorId;await saveKey('cases',state.cases);await saveKey('lastDoctorId',state.lastDoctorId);toast('تم حفظ الحالة');state.incompleteCaseGuard=false;state.caseView='list';state.currentCase=null;render()};
+let addp=document.getElementById('add-price');if(addp)addp.onclick=async()=>{let n=document.getElementById('price-name').value.trim();if(!n)return toast('اكتب اسم التركيبة');state.priceList.push({id:'p_'+Date.now(),name:n,price:Number(document.getElementById('price-value').value)||0});await saveKey('priceList',state.priceList);render()};
+document.querySelectorAll('[data-price]').forEach(e=>e.onchange=async()=>{let p=state.priceList.find(x=>x.id===e.dataset.price);if(!p)return;p.price=Number(e.value)||0;await saveKey('priceList',state.priceList);toast('تم تعديل سعر التركيبة')});
+document.querySelectorAll('[data-del-price]').forEach(b=>b.onclick=async()=>{if(!verifyEditDelete())return;if(confirm('حذف السعر؟')){state.priceList=state.priceList.filter(p=>p.id!==b.dataset.delPrice);await saveKey('priceList',state.priceList);render()}});
+let dpn=document.getElementById('doctor-pay-note');if(dpn)dpn.onchange=()=>{let c=document.getElementById('doctor-pay-note-custom');if(c)c.style.display=dpn.value==='أخري'?'block':'none'};
+let adddp=document.getElementById('add-doctor-pay');if(adddp)adddp.onclick=async()=>{let doctorId=document.getElementById('doctor-pay-doctor')?.value||state.doctorDetailId,amount=Number(document.getElementById('doctor-pay-amount')?.value||0),date=document.getElementById('doctor-pay-date')?.value||new Date().toISOString().slice(0,10),note=(document.getElementById('doctor-pay-note')?.value==='أخري'?document.getElementById('doctor-pay-note-custom')?.value.trim():document.getElementById('doctor-pay-note')?.value)||'';if(!doctorId)return toast('اختر الطبيب');if(amount<=0)return toast('اكتب مبلغًا صحيحًا');let base=state.cases.filter(c=>c.doctorId===doctorId).reduce((s,c)=>s+caseTotals(c).due,0),already=state.doctorPayments.filter(p=>p.doctorId===doctorId).reduce((s,p)=>s+Number(p.amount||0),0);if(amount>Math.max(0,base-already))return toast('المبلغ أكبر من المستحق على الطبيب');state.doctorPayments.push({id:'dp_'+Date.now(),doctorId,amount,date,note});await saveKey('doctorPayments',state.doctorPayments);toast('تم تسجيل الدفعة وخصمها من المستحق');render()};
+document.querySelectorAll('[data-edit-doctor-pay]').forEach(b=>b.onclick=async()=>{if(!verifyEditDelete())return;let p=state.doctorPayments.find(x=>x.id===b.dataset.editDoctorPay);if(!p)return;let amount=prompt('المبلغ',String(p.amount??''));if(amount===null)return;amount=Number(amount);if(!(amount>0))return toast('اكتب مبلغًا صحيحًا');let date=prompt('تاريخ التحصيل YYYY-MM-DD',p.date||new Date().toISOString().slice(0,10));if(date===null)return;if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return toast('صيغة التاريخ يجب أن تكون YYYY-MM-DD');let note=prompt('طريقة الدفع / الملاحظة',p.note||'');if(note===null)return;let base=state.cases.filter(c=>c.doctorId===p.doctorId).reduce((z,c)=>z+caseTotals(c).due,0),already=state.doctorPayments.filter(x=>x.doctorId===p.doctorId&&x.id!==p.id).reduce((z,x)=>z+Number(x.amount||0),0);if(amount>Math.max(0,base-already))return toast('المبلغ أكبر من المستحق على الطبيب');p.amount=amount;p.date=date;p.note=note;await saveKey('doctorPayments',state.doctorPayments);toast('تم تعديل تحصيل الدكتور');render()});
+document.querySelectorAll('[data-del-doctor-pay]').forEach(b=>b.onclick=async()=>{if(!verifyEditDelete()||!confirm('حذف الدفعة؟ سيعود المبلغ للمستحق على الطبيب.'))return;state.doctorPayments=state.doctorPayments.filter(p=>p.id!==b.dataset.delDoctorPay);await saveKey('doctorPayments',state.doctorPayments);render()});
+let sd=document.getElementById('search-doctor');if(sd)sd.onchange=e=>state.searchFilters.doctorId=e.target.value;let sf=document.getElementById('search-from');if(sf)sf.onchange=e=>state.searchFilters.from=e.target.value;let st=document.getElementById('search-to');if(st)st.onchange=e=>state.searchFilters.to=e.target.value;let rs=document.getElementById('run-search');if(rs)rs.onclick=()=>render();let ps=document.getElementById('print-statement');if(ps)ps.onclick=()=>printStatement();let cs=document.getElementById('clear-search');if(cs)cs.onclick=()=>{state.searchFilters={doctorId:'',from:'',to:''};render()};
+let exd=document.getElementById('export-doctor');if(exd)exd.onchange=e=>state.reportFilters.doctorId=e.target.value;let exf=document.getElementById('export-from');if(exf)exf.onchange=e=>state.reportFilters.from=e.target.value;let ext=document.getElementById('export-to');if(ext)ext.onchange=e=>state.reportFilters.to=e.target.value;let pe=document.getElementById('preview-export');if(pe)pe.onclick=()=>openExport(false);let pde=document.getElementById('pdf-export');if(pde)pde.onclick=()=>openExport(true);let ii=document.getElementById('issue-invoice');if(ii)ii.onclick=()=>issueInvoice();let cm=document.getElementById('carryover-mode');if(cm)cm.onchange=async e=>{state.settings.carryoverMode=e.target.value;await saveKey('settings',state.settings);toast('تم حفظ إعداد ترحيل الرصيد')};let fp=document.getElementById('full-pdf-backup');if(fp)fp.onclick=()=>openFullBackupPDF();let aip=document.getElementById('all-invoices-pdf');if(aip)aip.onclick=()=>openAllInvoicesBackup();let db=document.getElementById('download-backup');if(db)db.onclick=()=>{downloadBackup();const s=document.getElementById('backup-status');if(s)s.textContent='تم تنزيل النسخة الاحتياطية.'};let rb=document.getElementById('restore-backup');if(rb)rb.onclick=()=>document.getElementById('backup-file')?.click();let bf=document.getElementById('backup-file');if(bf)bf.onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!x.doctors||!x.cases)throw 0;if(!verifyEditDelete())return;if(!confirm('استعادة النسخة ستستبدل البيانات الحالية. هل تريد المتابعة؟'))return;state.doctors=x.doctors||[];state.priceList=x.priceList||[];state.cases=x.cases||[];state.doctorPayments=x.doctorPayments||[];state.invoices=x.invoices||[];state.settings=x.settings||{pin:'',editPin:'',numerals:'en',carryoverMode:'auto'}; state.settings.editPin=state.settings.editPin||'';state.settings.carryoverMode=state.settings.carryoverMode||'auto';state.lastDoctorId=x.lastDoctorId||'';await saveKey('doctors',state.doctors);await saveKey('priceList',state.priceList);await saveKey('cases',state.cases);await saveKey('doctorPayments',state.doctorPayments);await saveKey('invoices',state.invoices);await saveKey('settings',state.settings);await saveKey('lastDoctorId',state.lastDoctorId);toast('تمت استعادة النسخة الاحتياطية');render()}catch(err){toast('ملف النسخة الاحتياطية غير صالح')}};
+let sp=document.getElementById('save-pin');if(sp)sp.onclick=async()=>{let v=document.getElementById('pin').value.trim();if(!v)return toast('اكتب الرقم السري');state.settings.pin=v;await saveKey('settings',state.settings);state.locked=false;render()};
+let cp=document.getElementById('clear-pin');if(cp)cp.onclick=async()=>{if(verify()){state.settings.pin='';await saveKey('settings',state.settings);render()}};
+let sep=document.getElementById('save-edit-pin');if(sep)sep.onclick=async()=>{let v=document.getElementById('edit-pin').value.trim();if(!v)return toast('اكتب رقم سري للتعديل والحذف');state.settings.editPin=v;await saveKey('settings',state.settings);toast('تم حفظ رقم التعديل والحذف');render()};let cep=document.getElementById('clear-edit-pin');if(cep)cep.onclick=async()=>{if(!verifyEditDelete())return;state.settings.editPin='';await saveKey('settings',state.settings);render()};
+let bd=document.getElementById('back-doc');if(bd)bd.onclick=()=>{state.doctorDetailId=null;render()};
+}
+function renderPublicPaymentPage(){
+  const params=new URLSearchParams(location.search);
+  const phone=params.get('phone')||'01011645139';
+  const safePhone=esc(phone);
+  const a=document.getElementById('app');
+  a.innerHTML=`<div class="payment-public" dir="rtl"><main class="payment-card"><div class="payment-logo">N</div><h1>Nova Dental Lab</h1><div class="lab-sub">لاب الأسنان</div><div class="payment-number-label">رقم التحويل</div><div class="payment-number" id="public-payment-number">${safePhone}</div><button class="copy-payment-number" id="copy-public-payment">نسخ الرقم</button><div class="payment-methods"><h2>يمكن التحويل على الرقم عن طريق:</h2><div class="pay-method"><span class="pay-dot vod-dot"></span> فودافون كاش</div><div class="pay-method"><span class="pay-dot insta-dot"></span> إنستا باي</div></div><div class="payment-warning">⚠️ برجاء التأكد من اسم المستلم قبل التحويل.</div><div class="check">يرجى مراجعة الرقم واسم المستلم قبل تأكيد التحويل.</div><div class="payment-footer">Nova Dental Lab — لاب الأسنان</div></main></div>`;
+  const btn=document.getElementById('copy-public-payment');
+  if(btn) btn.onclick=async()=>{try{await navigator.clipboard.writeText(phone);btn.textContent='تم نسخ الرقم ✓';setTimeout(()=>btn.textContent='نسخ الرقم',1600)}catch(e){const ta=document.createElement('textarea');ta.value=phone;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();btn.textContent='تم نسخ الرقم ✓';setTimeout(()=>btn.textContent='نسخ الرقم',1600)}};
+}
+if(new URLSearchParams(location.search).get('payment')==='1'){renderPublicPaymentPage()}else{init();}
+</script>
+<script>document.addEventListener('DOMContentLoaded',()=>document.querySelectorAll('.calculator-panel').forEach(window.initNovaCalculator));</script>
+<script id="nova-export-validation-v7">
+document.addEventListener("change",function(e){
+  if(!e.target.matches('input[type="date"]')) return;
+  const dates=[...document.querySelectorAll('input[type="date"]')];
+  const from=dates.find(x=>/from|start|من/i.test(x.id+x.name+x.placeholder));
+  const to=dates.find(x=>/to|end|إلى/i.test(x.id+x.name+x.placeholder));
+  if(from&&to&&from.value&&to.value) to.setCustomValidity(to.value<from.value?"تاريخ النهاية يجب أن يكون بعد أو مساويًا لتاريخ البداية":"");
+});
+</script>
+</body>
+
+
+<style id="nova-compact-ui">
+/* Compact Windows 11 desktop UI */
+:root{
+  --compact-font: 13px;
+}
+html,body{font-size:var(--compact-font)}
+body{line-height:1.35}
+#app{
+  width:calc(100% - 24px);
+  max-width:1580px;
+  margin:12px auto 76px;
+  padding:0;
+}
+header{
+  padding:12px 16px !important;
+  border-radius:10px !important;
+  margin-bottom:10px !important;
+}
+header h1{font-size:18px !important;margin:0 !important}
+header p{font-size:11px !important;margin:3px 0 0 !important}
+nav.tabs,.tabs{
+  gap:5px !important;
+  padding:5px !important;
+  margin-bottom:10px !important;
+  border-radius:9px !important;
+}
+nav.tabs button,.tabs button{
+  min-height:32px !important;
+  padding:6px 11px !important;
+  font-size:12px !important;
+  border-radius:7px !important;
+}
+.panel,.card,.section,.box{
+  padding:12px !important;
+  margin-bottom:10px !important;
+  border-radius:9px !important;
+}
+.panel h2,.panel h3,.section h2,.section h3{
+  font-size:14px !important;
+  margin:0 0 8px !important;
+}
+label{font-size:11.5px !important;margin-bottom:3px !important}
+input,select,textarea,button{
+  font-family:inherit !important;
+  font-size:12px !important;
+}
+input,select{
+  min-height:34px !important;
+  padding:6px 8px !important;
+}
+textarea{
+  min-height:66px !important;
+  padding:7px 8px !important;
+}
+button{
+  min-height:33px !important;
+  padding:6px 10px !important;
+  border-radius:7px !important;
+}
+table{
+  font-size:11.5px !important;
+}
+th,td{
+  padding:6px 7px !important;
+}
+.stat-card,.stat{
+  padding:10px 11px !important;
+  min-height:70px !important;
+  border-radius:8px !important;
+}
+.stat-card .value,.stat .value{
+  font-size:19px !important;
+}
+.stat-card .label,.stat .label{
+  font-size:10.5px !important;
+}
+.grid,.cards,.stats-grid{
+  gap:8px !important;
+}
+/* Use the frame efficiently on desktop */
+@media (min-width:900px){
+  .grid-2{grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important}
+  .grid-3{grid-template-columns:repeat(3,minmax(0,1fr)) !important}
+  .grid-4{grid-template-columns:repeat(4,minmax(0,1fr)) !important}
+  .form-grid{gap:8px !important}
+  .case-form,.form-section{max-width:none !important}
+  .table-wrap{width:100% !important}
+}
+.bottom-nav{
+  width:min(620px,calc(100% - 24px)) !important;
+  padding:5px !important;
+  gap:4px !important;
+  border-radius:10px !important;
+}
+.bottom-nav button{
+  min-height:34px !important;
+  padding:5px 10px !important;
+  font-size:11px !important;
+}
+@media(max-width:700px){
+  #app{width:calc(100% - 14px);margin:7px auto 70px}
+  header{padding:10px 12px !important}
+  header h1{font-size:16px !important}
+  .panel,.card,.section,.box{padding:10px !important}
+  .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  table{font-size:10.5px !important}
+  th,td{padding:5px !important}
+}
+</style>
+
+
+<style id="nova-compact-v2">
+/* Extra compact + sharper desktop density */
+html,body{font-size:12px}
+body{line-height:1.28;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+#app{
+  width:calc(100% - 16px);
+  max-width:1650px;
+  margin:8px auto 68px;
+}
+header{
+  padding:9px 13px !important;
+  margin-bottom:7px !important;
+  border-radius:8px !important;
+}
+header h1{font-size:16px !important;letter-spacing:-.15px}
+header p{font-size:10px !important;margin-top:2px !important}
+nav.tabs,.tabs{
+  padding:4px !important;
+  gap:3px !important;
+  margin-bottom:7px !important;
+  border-radius:8px !important;
+}
+nav.tabs button,.tabs button{
+  min-height:29px !important;
+  padding:4px 9px !important;
+  font-size:11px !important;
+  border-radius:6px !important;
+}
+.panel,.card,.section,.box{
+  padding:9px !important;
+  margin-bottom:7px !important;
+  border-radius:8px !important;
+}
+.panel h2,.panel h3,.section h2,.section h3{
+  font-size:13px !important;
+  margin:0 0 6px !important;
+}
+label{font-size:10.5px !important;margin-bottom:2px !important}
+input,select,textarea,button{font-size:11px !important}
+input,select{
+  min-height:30px !important;
+  padding:4px 7px !important;
+}
+textarea{
+  min-height:52px !important;
+  padding:5px 7px !important;
+}
+button{
+  min-height:29px !important;
+  padding:4px 8px !important;
+  border-radius:6px !important;
+}
+table{font-size:10.5px !important}
+th,td{padding:5px 6px !important}
+.stat-card,.stat{
+  padding:8px 9px !important;
+  min-height:58px !important;
+  border-radius:7px !important;
+}
+.stat-card .value,.stat .value{font-size:17px !important}
+.stat-card .label,.stat .label{font-size:9.5px !important}
+.grid,.cards,.stats-grid{gap:6px !important}
+.form-grid{gap:6px !important}
+
+/* Make panels use the available frame */
+@media(min-width:900px){
+  .grid-2{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  .grid-3{grid-template-columns:repeat(3,minmax(0,1fr)) !important}
+  .grid-4{grid-template-columns:repeat(4,minmax(0,1fr)) !important}
+  .case-form,.form-section,.table-wrap{max-width:none !important;width:100% !important}
+}
+
+/* Very small settings lock */
+#settingsLock,
+.settings-lock,
+.lock-btn,
+button[title*="قفل"],
+button[aria-label*="قفل"]{
+  width:24px !important;
+  min-width:24px !important;
+  height:24px !important;
+  min-height:24px !important;
+  padding:2px !important;
+  font-size:11px !important;
+  line-height:1 !important;
+  border-radius:5px !important;
+}
+#settingsLock svg,
+.settings-lock svg,
+.lock-btn svg{
+  width:12px !important;
+  height:12px !important;
+}
+@media(max-width:700px){
+  #app{width:calc(100% - 10px);margin:5px auto 65px}
+  header{padding:8px 10px !important}
+  header h1{font-size:15px !important}
+  .panel,.card,.section,.box{padding:8px !important}
+  .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  table{font-size:9.5px !important}
+  th,td{padding:4px !important}
+}
+.bottom-nav{
+  width:min(570px,calc(100% - 18px)) !important;
+  padding:4px !important;
+  gap:3px !important;
+  border-radius:9px !important;
+}
+.bottom-nav button{
+  min-height:30px !important;
+  padding:4px 8px !important;
+  font-size:10px !important;
+}
+</style>
+
+
+<style id="nova-compact-v3">
+/* Tiny secondary headings and settings lock */
+.panel h2,.panel h3,.panel h4,
+.section h2,.section h3,.section h4,
+.card h2,.card h3,.card h4,
+.box h2,.box h3,.box h4{
+  font-size:11px !important;
+  font-weight:650 !important;
+  line-height:1.2 !important;
+  margin:0 0 5px !important;
+  letter-spacing:-.1px !important;
+}
+.panel .title,.section .title,.card .title,.box .title,
+.panel .subtitle,.section .subtitle{
+  font-size:10.5px !important;
+  line-height:1.2 !important;
+}
+label{font-size:10px !important}
+input,select,textarea,button{font-size:10.5px !important}
+input,select{min-height:29px !important}
+button{min-height:28px !important;padding:3px 7px !important}
+
+/* Hide decorative lock image/icon if it is an image; keep functional lock control tiny */
+.settings img[alt*="قفل"],
+.settings img[src*="lock"],
+#settings img[alt*="قفل"],
+#settings img[src*="lock"]{
+  display:none !important;
+}
+.settings-lock,
+.lock-btn,
+#settingsLock{
+  width:20px !important;
+  min-width:20px !important;
+  height:20px !important;
+  min-height:20px !important;
+  padding:1px !important;
+  font-size:9px !important;
+  border-radius:4px !important;
+}
+.settings-lock svg,.lock-btn svg,#settingsLock svg{
+  width:9px !important;height:9px !important;
+}
+.settings-lock img,.lock-btn img,#settingsLock img{
+  width:9px !important;height:9px !important;
+  object-fit:contain !important;
+}
+</style>
+
+<style id="nova-lockscreen-ui">
+.lock-screen{
+  position:fixed;inset:0;z-index:9999;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;
+  font-family:'Tajawal',system-ui,sans-serif;
+  color:#fff;
+  background:
+    radial-gradient(circle at 50% 12%,rgba(79,174,255,.34),transparent 34%),
+    radial-gradient(circle at 20% 75%,rgba(21,91,170,.45),transparent 38%),
+    linear-gradient(135deg,#071a31 0%,#0c3157 48%,#07172a 100%);
+}
+.lock-screen:before{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:44px 44px;opacity:.35;
+}
+.lock-bg-glow{
+  position:absolute;width:620px;height:620px;border-radius:50%;
+  background:rgba(54,157,255,.13);filter:blur(80px);pointer-events:none;
+}
+.lock-topbar{
+  position:absolute;top:0;left:0;right:0;height:42px;z-index:3;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 18px;background:rgba(5,22,42,.48);
+  border-bottom:1px solid rgba(255,255,255,.09);
+  font-size:11px;
+}
+.lock-brand{display:flex;align-items:center;gap:8px;color:#eaf5ff}
+.lock-brand-dot{
+  width:21px;height:21px;border-radius:6px;background:#1687ef;
+  display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;
+  box-shadow:0 3px 12px rgba(24,139,239,.35)
+}
+.lock-brand small{font-size:9px;opacity:.7;margin-right:4px}
+.lock-window-icons{display:flex;gap:22px;font-size:17px;opacity:.8;direction:ltr}
+.lock-card{
+  position:relative;z-index:2;width:min(520px,calc(100% - 30px));
+  padding:34px 46px 32px;text-align:center;
+  border:1px solid rgba(174,220,255,.48);
+  border-radius:18px;
+  background:linear-gradient(145deg,rgba(55,115,173,.30),rgba(12,44,77,.52));
+  box-shadow:0 22px 70px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.13);
+  backdrop-filter:blur(18px);
+}
+.lock-icon-ring{
+  width:82px;height:82px;margin:0 auto 15px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 35% 25%,#51c5ff,#0874e6 65%,#0755ad);
+  border:3px solid rgba(133,211,255,.72);
+  box-shadow:0 0 0 8px rgba(74,177,255,.10),0 10px 35px rgba(0,126,255,.32);
+}
+.lock-icon-ring svg{width:42px;height:42px;stroke:#fff;stroke-width:1.7}
+.lock-logo{font-size:30px;line-height:1.1;letter-spacing:-.4px}
+.lock-logo b{color:#25a7ff}.lock-logo strong{font-weight:700;color:#fff}
+.lock-tagline{margin-top:7px;color:rgba(225,242,255,.65);font-size:8px;letter-spacing:3px}
+.lock-title{margin-top:20px;font-size:16px;font-weight:700}
+.lock-title span svg{width:17px;height:17px;vertical-align:-3px;margin-right:4px;stroke:#bfe6ff}
+.lock-sub{font-size:11px;color:rgba(235,247,255,.72);margin-top:5px}
+.pin-boxes{
+  position:relative;display:flex;direction:ltr;justify-content:center;gap:12px;
+  margin:20px 0 16px;
+}
+.pin-boxes span{
+  width:57px;height:57px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(235,246,255,.20);
+  border:1px solid rgba(226,244,255,.58);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+  font-size:25px;color:#fff;
+}
+.pin-boxes span.filled{background:rgba(225,244,255,.30);box-shadow:0 0 0 1px rgba(76,180,255,.24)}
+.pin-boxes input{
+  position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:text;
+}
+.lock-enter{
+  width:100%;height:44px;border:0;border-radius:10px;
+  background:linear-gradient(180deg,#1188f4,#0565d2);
+  color:#fff;font-family:inherit;font-size:14px;font-weight:700;
+  box-shadow:0 8px 22px rgba(0,99,219,.30);
+  cursor:pointer;transition:.15s;
+}
+.lock-enter:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.lock-enter b{font-size:19px;margin-right:8px}
+.lock-error{height:17px;margin-top:8px;color:#ffb9b9;font-size:10px}
+.lock-footer{
+  position:absolute;z-index:3;bottom:13px;left:18px;right:18px;
+  display:flex;align-items:center;justify-content:space-between;
+  color:rgba(228,244,255,.68);font-size:9px;
+}
+.lock-footer i{
+  display:inline-block;width:7px;height:7px;border-radius:50%;background:#62db55;
+  box-shadow:0 0 8px rgba(98,219,85,.7);margin-right:3px
+}
+@media(max-width:600px){
+  .lock-card{padding:27px 20px 25px;border-radius:14px}
+  .lock-icon-ring{width:66px;height:66px}.lock-icon-ring svg{width:34px;height:34px}
+  .lock-logo{font-size:24px}.lock-title{font-size:14px}
+  .pin-boxes{gap:7px}.pin-boxes span{width:52px;height:52px}
+  .lock-footer{font-size:8px}.lock-footer span:nth-child(2){display:none}
+}
+</style>
+
+
+<style id="nova-subheadings-v2">
+/* Redesigned secondary headings: compact, clean, Windows-11-like */
+.panel h2,.panel h3,.panel h4,
+.section h2,.section h3,.section h4,
+.card h2,.card h3,.card h4,
+.box h2,.box h3,.box h4{
+  display:flex !important;
+  align-items:center !important;
+  gap:7px !important;
+  font-family:'Tajawal',system-ui,sans-serif !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  line-height:1.25 !important;
+  color:#26384b !important;
+  letter-spacing:0 !important;
+  margin:0 0 8px !important;
+  padding:0 0 6px !important;
+  border-bottom:1px solid rgba(90,115,140,.14) !important;
+}
+.panel h2:before,.panel h3:before,.panel h4:before,
+.section h2:before,.section h3:before,.section h4:before,
+.card h2:before,.card h3:before,.card h4:before,
+.box h2:before,.box h3:before,.box h4:before{
+  content:"" !important;
+  width:3px !important;
+  height:15px !important;
+  flex:0 0 3px !important;
+  border-radius:3px !important;
+  background:linear-gradient(180deg,#1995f5,#0a6bd6) !important;
+}
+.panel h2 svg,.panel h3 svg,.panel h4 svg,
+.section h2 svg,.section h3 svg,.section h4 svg,
+.card h2 svg,.card h3 svg,.card h4 svg,
+.box h2 svg,.box h3 svg,.box h4 svg{
+  width:14px !important;height:14px !important;
+  opacity:.72 !important;
+}
+.panel .title,.section .title,.card .title,.box .title{
+  font-size:11.5px !important;
+  font-weight:700 !important;
+  color:#26384b !important;
+}
+</style>
+
+</html>
+
+<style id="nova-calculator-v7">
+.calculator-panel{max-width:420px;margin:0 auto;padding:12px;border:1px solid rgba(70,100,130,.16);border-radius:10px;background:#fff}
+.calc-display{width:100%;height:48px!important;min-height:48px!important;text-align:left!important;direction:ltr!important;font-size:20px!important;font-weight:700!important;margin-bottom:7px}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.calc-grid button{height:36px!important;min-height:36px!important;font-size:12px!important;font-weight:650}
+.calc-grid .calc-eq{grid-row:span 2;height:auto!important}
+.calc-grid .calc-zero{grid-column:span 2}
+</style>
+
+<script id="nova-calculator-v7-js">
+(function(){
+  function initCalculator(root){
+    if(!root || root.dataset.calcReady) return;
+    root.dataset.calcReady="1";
+    const display=root.querySelector(".calc-display");
+    if(!display) return;
+    let expr="";
+    const paint=()=>display.value=expr||"0";
+    root.addEventListener("click",e=>{
+      const b=e.target.closest("[data-calc]");
+      if(!b) return;
+      const v=b.dataset.calc;
+      if(v==="C"){expr="";paint();return}
+      if(v==="back"){expr=expr.slice(0,-1);paint();return}
+      if(v==="="){
+        try{
+          if(!/^[0-9+\-*/().%\s]+$/.test(expr)) throw 0;
+          let s=expr.replace(/%/g,"/100");
+          let result=Function('"use strict";return ('+s+')')();
+          if(!Number.isFinite(result)) throw 0;
+          expr=String(Math.round(result*100000000)/100000000);
+        }catch{expr="خطأ"}
+        paint(); return;
+      }
+      if(expr==="خطأ") expr="";
+      expr += v;
+      paint();
+    });
+    paint();
+  }
+  window.initNovaCalculator=initCalculator;
+  document.querySelectorAll(".calculator-panel").forEach(initCalculator);
+})();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('service-worker.js').catch(function(err){
+      console.warn('Service worker registration failed:', err);
+    });
+  });
+}
+</script>
